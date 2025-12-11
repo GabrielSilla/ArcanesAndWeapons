@@ -1,0 +1,48 @@
+<div *ngIf="cards.length > 0" class="cards-overlay">
+</div>
+
+<div *ngIf="cards.length > 0" class="cards-container" #carousel>
+    <div class="card"  *ngFor="let card of cards; let i = index"
+        [class.active]="i === activeIndex()"
+        [class.dust]="i === cardToAnimate && isAnimating"
+        (click)="selectCard(i)">
+        <ion-img [src]="card.source"></ion-img>
+        <ion-button *ngIf="hasActions && type == 'vd' && i == activeIndex()" class="choose-btn pulse-button-circular" shape="round" size="small" (click)="selected(card.id)">
+            <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button shape="round" fill="outline" size="small"  class="use-btn pulse-button" *ngIf="hasActions && type == 'bag' && i == activeIndex()" (click)="selected(card.id)">
+            Usar Item
+        </ion-button>
+
+        <div *ngIf="type == 'cart'">
+            <div *ngIf="hasActions && i == activeIndex()" class="stone-view">
+                <div *ngIf="card.arcaneCost > 0">
+                    <ion-img src="/assets/cards/magic/arcane-stone.png"></ion-img>
+                    <ion-badge color="primary">{{card.arcaneCost}}</ion-badge>
+                </div>
+                <div *ngIf="card.deathCost > 0">
+                    <ion-img src="/assets/cards/magic/death-stone.png"></ion-img>
+                    <ion-badge color="primary">{{card.deathCost}}</ion-badge>
+                </div>
+                <div *ngIf="card.elementalCost > 0">
+                    <ion-img src="/assets/cards/magic/elemental-stone.png"></ion-img>
+                    <ion-badge color="primary">{{card.elementalCost}}</ion-badge>
+                </div>
+                <div *ngIf="card.holyCost > 0">
+                    <ion-img src="/assets/cards/magic/holy-stone.png"></ion-img>
+                    <ion-badge color="primary">{{card.holyCost}}</ion-badge>
+                </div>
+            </div>
+            <ion-button shape="round" fill="outline" size="small"  class="buy-btn pulse-button" *ngIf="hasActions && i == activeIndex()" (click)="selected(card.id)">
+                Comprar
+            </ion-button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="cards.length > 0" class="close-btn-view">
+    <ion-button shape="round" size="small" fill="outline" (click)="close()">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+    </ion-button>
+</div>

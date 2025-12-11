@@ -1,0 +1,110 @@
+<div class="flash-overlay" [class.active]="flashActive()"></div>
+<div [class]="modalOpen() ? 'mask-card' : ''"></div>
+
+<app-cards-scroll [cards]="vdCardsForCarousel()" [type]="'vd'" (cardSelected)="selectedVD($event)"></app-cards-scroll>
+<app-cards-scroll [cards]="magicCardsForCarousel()" [type]="'none'" [hasActions]="false" (cardSelected)="closeMagicView()"></app-cards-scroll>
+<app-cards-scroll [cards]="storeSpellCards()" [type]="'cart'" [hasActions]="true" (cardSelected)="chooseCardToBuy($event)"></app-cards-scroll>
+<app-bag [showBag]="showBag()" [bagCards]="bagCards()" [stoneCards]="bagStones()" (closed)="closedBag()" (usedItem)="selectedAnItem($event)"></app-bag>
+
+<app-action-config [showActionSheet]="showActionSheet()" (closed)="onActionSheetClosed()" (action)="onActionSheetSelected($event)"></app-action-config>
+
+<div>
+    <div *ngIf="dice() > 0" class="dice-mask">
+        <div class="dice-result info">ng 
+            <ion-label class="info-large" [color]="diceRolled() == true ? 'danger' : 'primary'">{{dice()}}</ion-label>
+        </div>
+    </div> 
+
+    <div *ngIf="dice() == 0 && selectedCard() == ''" class="left-top-view">
+        <div class="life-view">
+            <div class="health-icon primary"></div>
+            <ion-label class="info" color="primary">{{hp()}}/{{totalhp()}}</ion-label>
+            <ion-button size="small" fill="outline" shape="round" class="plus" (click)="lifePlus()">
+                <ion-icon slot="icon-only" name="chevron-up-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button size="small" fill="outline" shape="round" class="minus" (click)="lifeMinus()">
+                <ion-icon slot="icon-only" name="chevron-down-circle-outline"></ion-icon>
+            </ion-button>
+        </div>
+        <div class="level-view">
+            <div class="level-icon primary"></div>
+            <ion-label class="info" color="primary">{{level()}}</ion-label>
+            <ion-button size="small" class="plus" fill="outline" shape="round" (click)="levelPlus()">
+                <ion-icon slot="icon-only" name="chevron-up-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button size="small" class="minus"  fill="outline" shape="round" (click)="levelMinus()">
+                <ion-icon slot="icon-only" name="chevron-down-circle-outline"></ion-icon>
+            </ion-button>
+        </div>
+        <div class="damage-view">
+            <div class="attack-icon primary"></div>
+            <ion-label class="info" color="primary">{{damage()}}</ion-label>
+        </div>
+        <div class="config-view">
+            <ion-icon id="config-btn" name="ellipsis-vertical-circle" (click)="showActionSheet.set(true)"></ion-icon>
+        </div>
+    </div>
+    <div *ngIf="dice() == 0 && selectedCard() == ''" class="right-top-view">
+        <div class="dice-view">
+            <ion-img src="/assets/dices/d20.png" (click)="rollD20()"></ion-img>
+        </div>
+        <div class="dice-view">
+            <ion-img src="/assets/dices/d12.png" (click)="rollD12()"></ion-img>
+        </div>
+        <div class="dice-view">
+            <ion-img src="/assets/dices/d4.png" (click)="rollD4()"></ion-img>
+        </div>
+        <div *ngIf="hasClass() && hasRace() && hasVD()" class="chest primary" (click)="treasureShuffle()"></div>
+        <div *ngIf="hasClass() && hasRace() && hasVD()" class="bag primary" (click)="activeBag()"></div>
+        <div *ngIf="bagStones().length > 0" class="coin primary" (click)="openSpellCarousel()"></div>
+    </div>
+    <div *ngIf="dice() == 0 && selectedCard() == ''" class="right-bottom-view">
+        <div class="card" (click)="classCardView(classCard())">
+            <ion-button *ngIf="!hasClass()" fill="outline" size="small" class="plus" (click)="shuffleClass()">Sortear</ion-button>
+            <ion-img [src]="hasClass() ? classCard() : '/assets/cards/classes/no-class.png'"></ion-img>
+        </div>
+        <div class="card" (click)="raceCardView(raceCard())">
+            <ion-button *ngIf="!hasRace()" fill="outline" size="small" class="plus" (click)="shuffleRace()">Sortear</ion-button>
+            <ion-img [src]="hasRace() ? raceCard() : '/assets/cards/races/no-race.png'"></ion-img>
+        </div>
+        <div class="card" (click)="weaponCardView(weaponCard())">
+            <ion-img [src]="hasWeapon() ? weaponCard() : '/assets/cards/itens/no-weapon.png'"></ion-img>
+        </div>
+        <div class="card">
+            <ion-button fill="outline" size="small" class="plus">Adicionar</ion-button>
+            <ion-img [src]="hasSlave() ? slaveCard() : '/assets/cards/classes/no-slave.png'"></ion-img>
+        </div>
+        <div class="card" (click)="vdCardView(vdCard())">
+            <ion-button *ngIf="!hasVD()"  fill="outline" size="small" class="plus" (click)="selectVD()">Adicionar</ion-button>
+            <ion-img [src]="hasVD() ? vdCard() : '/assets/cards/vd/no-vd.png'"></ion-img>
+        </div>
+        <div class="card" (click)="magicCardView()">
+            <div class="magic-card" *ngFor="let magicCard of magicCards(); let i = index">
+                <ion-img [src]="magicCard.source" [style.margin-left.px]="i * 4"></ion-img>        
+            </div>
+            <ion-img *ngIf="!hasMagic()" src="/assets/cards/magic/no-magic.png"></ion-img>
+        </div>
+    </div>
+
+    <div *ngIf="selectedCard() != ''" class="card-view" (click)="resetCardView()">
+        <img [src]="selectedCard()">
+    </div>
+</div>
+
+<ion-card class="new-items" *ngIf="modalOpen()">
+  <ion-card-header>
+    <ion-card-title>Novos Itens Recebidos!</ion-card-title>
+  </ion-card-header>
+
+  <div class="new-item-content">
+    <ion-card-content *ngFor="let item of chestReceivedItens()">
+        &bull; {{item.name}}
+    </ion-card-content>
+  </div>
+
+  <div class="new-item-close">
+    <ion-button shape="round" size="small" fill="outline" (click)="closeNewItems()">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-card>

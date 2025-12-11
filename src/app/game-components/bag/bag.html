@@ -1,0 +1,22 @@
+<div *ngIf="showBag" class="bag-container">
+    <div class="stone-view">
+        <div>
+            <ion-img src="/assets/cards/magic/arcane-stone.png"></ion-img>
+            <ion-badge color="primary">{{getArcaneStones()}}</ion-badge>
+        </div>
+        <div>
+            <ion-img src="/assets/cards/magic/death-stone.png"></ion-img>
+            <ion-badge color="primary">{{getDeathStones()}}</ion-badge>
+        </div>
+        <div>
+            <ion-img src="/assets/cards/magic/elemental-stone.png"></ion-img>
+            <ion-badge color="primary">{{getElementalStones()}}</ion-badge>
+        </div>
+        <div>
+            <ion-img src="/assets/cards/magic/holy-stone.png"></ion-img>
+            <ion-badge color="primary">{{getHolyStones()}}</ion-badge>
+        </div>
+    </div>
+
+    <app-cards-scroll [type]="'bag'" [cards]="bagCards" (cardSelected)="selectedCard($event)"></app-cards-scroll>
+</div>
