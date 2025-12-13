@@ -1,0 +1,30 @@
+<div *ngIf="show" class="change-screen-overlay">
+</div>
+
+<ion-card class="change-items" *ngIf="show">
+  <ion-card-header>
+    <ion-card-title>Itens para Troca!</ion-card-title>
+  </ion-card-header>
+
+  <div class="change-item-content">
+        <ion-item>
+            <ion-select label="Enviar" placeholder="Seus Itens" (ionChange)="handleMyItem($event)">
+            <ion-select-option *ngFor="let item of bagItens" [value]="item.id">{{item.name}}</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-select label="Receber" placeholder="Itens Disponiveis" (ionChange)="handleDesiredItem($event)">
+            <ion-select-option *ngFor="let item of cards.itens" [value]="item.id">{{item.name}}</ion-select-option>
+            </ion-select>
+        </ion-item>
+  </div>
+
+  <div class="change-item-close">
+    <ion-button shape="round" size="small" fill="outline" (click)="close()">
+        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button shape="round" size="small" fill="outline" (click)="choose()">
+        <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-card>

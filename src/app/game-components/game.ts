@@ -10,11 +10,13 @@ import { ModalController } from '@ionic/angular';
 import { Bag } from "./bag/bag";
 import { single } from 'rxjs';
 import { MagicCardModel } from '../static/magic-card-model';
+import { Messages } from './messages/messages';
+import { ItemChange } from './item-change/item-change';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [IonicModule, CommonModule, ActionConfig, CardsScroll, Bag],
+  imports: [IonicModule, CommonModule, ActionConfig, CardsScroll, Bag, Messages, ItemChange],
   templateUrl: './game.html',
   styleUrl: './game.less'
 })
@@ -43,6 +45,8 @@ export class Game {
     showActionSheet = signal(false);
     modalOpen = signal(false);
     alertMessage = signal("");
+    messageModal = signal("");
+    showChangeModal = signal(false);
 
     // Atributes
     totalhp = signal(25);
@@ -170,25 +174,37 @@ export class Game {
     }
 
     chooseCardToBuy(cardId: any) {
-        let chosenSpell = this.cards.magic.filter(c => c.id == cardId)[0];
-        
-        let arcaneQtd = this.bagStones().filter(c => c.id == 1).length;
-        let deathQtd = this.bagStones().filter(c => c.id == 2).length;
-        let elementalQtd = this.bagStones().filter(c => c.id == 3).length;
-        let holyQtd = this.bagStones().filter(c => c.id == 4).length;
+        if(cardId) {
+            let chosenSpell = this.cards.magic.filter(c => c.id == cardId)[0];
+            
+            let arcaneQtd = this.bagStones().filter(c => c.id == 1).length;
+            let deathQtd = this.bagStones().filter(c => c.id == 2).length;
+            let elementalQtd = this.bagStones().filter(c => c.id == 3).length;
+            let holyQtd = this.bagStones().filter(c => c.id == 4).length;
 
-        if(chosenSpell.arcaneCost > arcaneQtd) return;
-        if(chosenSpell.deathCost > deathQtd) return;
-        if(chosenSpell.elementalCost > elementalQtd) return;
-        if(chosenSpell.holyCost > holyQtd) return;
-        
-        this.removeStonesAfterBuy(1, chosenSpell.arcaneCost);
-        this.removeStonesAfterBuy(2, chosenSpell.deathCost);
-        this.removeStonesAfterBuy(3, chosenSpell.elementalCost);
-        this.removeStonesAfterBuy(4, chosenSpell.holyCost);
+            let insufficientStones = false;
 
-        this.storeSpellCards.set([]);
-        this.magicCards.update(cards => [...cards, chosenSpell]);
+            if(chosenSpell.arcaneCost > arcaneQtd) insufficientStones = true;
+            if(chosenSpell.deathCost > deathQtd) insufficientStones = true;
+            if(chosenSpell.elementalCost > elementalQtd) insufficientStones = true;
+            if(chosenSpell.holyCost > holyQtd) insufficientStones = true;
+
+            if(insufficientStones == true) {
+                this.storeSpellCards.set([]);
+                this.showMessage("Pedras insuficientes!");
+                return;
+            }
+            
+            this.removeStonesAfterBuy(1, chosenSpell.arcaneCost);
+            this.removeStonesAfterBuy(2, chosenSpell.deathCost);
+            this.removeStonesAfterBuy(3, chosenSpell.elementalCost);
+            this.removeStonesAfterBuy(4, chosenSpell.holyCost);
+
+            this.storeSpellCards.set([]);
+            this.magicCards.update(cards => [...cards, chosenSpell]);
+        } else {
+            this.storeSpellCards.set([]);
+        }
     }
 
     removeStonesAfterBuy(id: number, qtd: number) {
@@ -223,6 +239,25 @@ export class Game {
         if(action == 'reset') {
             this.resetWithFlash();
         }
+
+        if(action == 'share') {
+            if (this.bagCards().length == 0) {
+                this.showMessage("Você não possui itens para trocar!");
+                return;
+            }
+
+            this.openChangeModal();
+        }
+    }
+
+    // MESSAGE CONTROL
+
+    showMessage(message: string) {
+        this.messageModal.set(message);
+
+        setTimeout(() => {
+            this.messageModal.set("");
+        }, 1500);
     }
 
     //SHUFFLE AND SELECTIONS
@@ -331,6 +366,29 @@ export class Game {
         }
     }
 
+    // Item Change
+    openChangeModal() {
+        this.showChangeModal.set(true);
+    }
+
+    changeSent(event: any) {
+        if(event) {
+            let desiredCard = this.cards.itens.filter(c => c.id == event.desiredItem)[0];
+            this.bagCards.update(cards => {
+                const index = cards.findIndex(c => c.id === event.myItem);
+
+                if (index !== -1) {
+                    cards.splice(index, 1);
+                }
+
+                return [...cards]; 
+            });
+            
+            this.bagCards.update(cards => [...cards, desiredCard]);  
+        }
+        this.showChangeModal.set(false);
+    }
+
     // Buy Spells Control
 
     openSpellCarousel() {
@@ -367,6 +425,10 @@ export class Game {
         this.bagCards.set([]);
         this.bagStones.set([]);
         this.magicCards.set([]);
+
+        this.magicCards.set([]);
+        this.magicCardsForCarousel.set([]);
+        this.storeSpellCards.set([]);
    }
 
    resetWithFlash() {

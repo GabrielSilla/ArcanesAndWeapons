@@ -1,3 +1,4 @@
+<app-messages [message]="messageModal()"></app-messages>
 <div class="flash-overlay" [class.active]="flashActive()"></div>
 <div [class]="modalOpen() ? 'mask-card' : ''"></div>
 
@@ -7,6 +8,7 @@
 <app-bag [showBag]="showBag()" [bagCards]="bagCards()" [stoneCards]="bagStones()" (closed)="closedBag()" (usedItem)="selectedAnItem($event)"></app-bag>
 
 <app-action-config [showActionSheet]="showActionSheet()" (closed)="onActionSheetClosed()" (action)="onActionSheetSelected($event)"></app-action-config>
+<app-item-change [show]="showChangeModal()" [bagItens]="bagCards()" (return)="changeSent($event)"></app-item-change>
 
 <div>
     <div *ngIf="dice() > 0" class="dice-mask">
@@ -71,7 +73,7 @@
             <ion-img [src]="hasWeapon() ? weaponCard() : '/assets/cards/itens/no-weapon.png'"></ion-img>
         </div>
         <div class="card">
-            <ion-button fill="outline" size="small" class="plus">Adicionar</ion-button>
+            <!--<ion-button fill="outline" size="small" class="plus">Adicionar</ion-button>-->
             <ion-img [src]="hasSlave() ? slaveCard() : '/assets/cards/classes/no-slave.png'"></ion-img>
         </div>
         <div class="card" (click)="vdCardView(vdCard())">

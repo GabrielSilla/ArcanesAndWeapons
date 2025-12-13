@@ -1,6 +1,7 @@
 <main class="main" [class]="'bg' + bgN()">
   <div class="mask"></div>
   <div class="content">
+    <app-init-screen [display]="showInit()" [image]="initImg()" [animate]="animation()" [bgAnimate]="bgAnimation()"></app-init-screen>
     <app-game></app-game>
   </div>
 </main>
