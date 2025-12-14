@@ -109,6 +109,19 @@ export class Cards {
         new MagicCardModel(35, "Conjurar Aranha", 'assets/cards/magic/nature/conjurar-aranha.png', 2, 0, 1, 0),
         new MagicCardModel(36, "Conjurar Lobo", 'assets/cards/magic/nature/conjurar-lobo.png', 3, 0, 2, 0),
         new MagicCardModel(37, "Convocar Raízes", 'assets/cards/magic/nature/convocar-raizes.png', 0, 0, 1, 1),
-        new MagicCardModel(38, "Forma de Urso", 'assets/cards/magic/nature/forma-de-urso.png', 1, 0, 2, 2)
+        new MagicCardModel(38, "Forma de Urso", 'assets/cards/magic/nature/forma-de-urso.png', 1, 0, 2, 2),
+        new MagicCardModel(39, "Armadilha de Sangue", 'assets/cards/magic/necro/armadilha-sangue.png', 0, 4, 0, 0),
+        new MagicCardModel(40, "Dardos de Sangue", 'assets/cards/magic/necro/dardos-sangue.png', 0, 4, 0, 0),
+        new MagicCardModel(41, "Drenar Vida", 'assets/cards/magic/necro/drenar-vida.png', 0, 4, 0, 0),
+        new MagicCardModel(42, "Invocar Esqueleto Maior", 'assets/cards/magic/necro/esqueleto-maior.png', 0, 4, 0, 0),
+        new MagicCardModel(43, "Garras de Sangue", 'assets/cards/magic/necro/garras-de-sangue.png', 0, 1, 0, 0),
+        new MagicCardModel(44, "Invocar Esqueleto", 'assets/cards/magic/necro/invocar-esqueleto.png', 0, 2, 0, 0),
+        new MagicCardModel(45, "Lança de Sangue", 'assets/cards/magic/necro/lanca-de-sangue.png', 0, 3, 0, 0),
+        new MagicCardModel(46, "Mão Zumbi", 'assets/cards/magic/necro/mao-zumbi.png', 0, 1, 0, 0),
+        new MagicCardModel(47, "Marca da Morte", 'assets/cards/magic/necro/marca-da-morte.png', 0, 2, 0, 0),
+        new MagicCardModel(48, "Praga", 'assets/cards/magic/necro/praga.png', 0, 3, 0, 0),
+        new MagicCardModel(49, "Remover Olhos", 'assets/cards/magic/necro/remover-olhos.png', 0, 2, 0, 0),
+        new MagicCardModel(50, "Toque Sombrio", 'assets/cards/magic/necro/toque-sombrio.png', 0, 1, 0, 0),
+        new MagicCardModel(51, "Transfusão Forçada", 'assets/cards/magic/necro/transfusao-forcada.png', 0, 2, 0, 0)
     ]
 }
