@@ -24,11 +24,21 @@ export class App {
 
   constructor() {
     this.InitScreen();
-    this.getBackground();
+    const width = window.innerWidth;
+
+    if(width > 650)
+      this.getBackgroundT();
+    else
+      this.getBackgroundSP();
   }
 
-  getBackground() {
+  getBackgroundSP() {
       let result = Math.floor(Math.random() * 3) + 1;
+      this.bgN.set(result);
+  }
+
+  getBackgroundT() {
+      let result = Math.floor(Math.random() * 2) + 4;
       this.bgN.set(result);
   }
 
