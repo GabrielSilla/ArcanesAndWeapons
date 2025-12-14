@@ -11,7 +11,7 @@
 
 .change-items {
     position: absolute;
-    place-self: center;
+    place-self: anchor-center;
     width: 80%;
     z-index: 9997;
 
@@ -48,5 +48,11 @@
         display: flex;
         justify-content: space-between;
         padding: 5px;
+    }
+}
+
+@media screen and (min-width: 650px) {
+    .change-items {
+        width: 400px;
     }
 }

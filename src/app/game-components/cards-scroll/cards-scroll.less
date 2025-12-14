@@ -120,8 +120,8 @@
     position: absolute;
     z-index: 9999;
     bottom: 5%;
-    display: inline-flex;
-    justify-self: center;
+    display: inline-center;
+    justify-self: anchor-center;
 
     ion-button {
         font-size: 20px;
@@ -129,11 +129,11 @@
 }
 
 .stone-view {
+    justify-self: anchor-center;
     position: absolute;
     z-index: 1000;
     bottom: -10%;
-    display: inline-flex;
-    justify-self: anchor-center;
+    display: flex;
 
     ion-img {
         width: 30px;
@@ -147,3 +147,51 @@
     }
 }
 
+@media screen and (min-width: 650px) {
+  .cards-container {
+    height: 900px;
+  }
+
+  .card {
+    display: flex;
+    flex: 0 0 auto;
+    height: 300px;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+    cursor: pointer;
+
+    &.active {
+      transform: scale(1.5); // carta central maior
+      z-index: 10;
+    }
+
+    .buy-btn {
+      font-size: 9px;
+      position: fixed;
+      bottom: -20%;
+      left: 33%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .use-btn {
+      font-size: 9px;
+      position: fixed;
+      bottom: -10%;
+      left: 33%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+  }
+
+  .stone-view {
+    ion-img {
+        width: 45px;
+        padding: 2px;
+    }
+      ion-badge {
+        position: absolute;
+        top: 0px;
+        font-size: 10px;
+    }
+  }
+}
