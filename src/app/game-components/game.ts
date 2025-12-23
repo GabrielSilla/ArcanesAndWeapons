@@ -62,9 +62,11 @@ export class Game {
     selectedCard = signal("");
 
     hasClass = signal(false);
+    classId = signal(0);
     classCard = signal("");
 
     hasRace = signal(false);
+    raceId = signal(0);
     raceCard = signal("");
 
     hasWeapon = signal(false);
@@ -133,6 +135,7 @@ export class Game {
         if(this.level() < 10) {
             this.level.set(this.level() + 1);
             this.totalhp.set(this.totalhp() + 5);
+            this.hp.set(this.hp() + 5);
             this.damage.set(this.damage() + 1);
         }
     }
@@ -141,6 +144,7 @@ export class Game {
         if(this.level() > 1) {
             this.level.set(this.level() - 1);
             this.totalhp.set(this.totalhp() - 5);
+            this.hp.set(this.hp() - 5);
             this.damage.set(this.damage() - 1);
         }
     }
@@ -266,6 +270,7 @@ export class Game {
         let result = Math.floor(Math.random() * 4) + 1;
         let selectedClass = this.cards.classes.filter(m => m.id == result)[0];
         this.classCard.set(selectedClass.source);
+        this.classId.set(selectedClass.id);
         this.hasClass.set(true);
     }
 
@@ -273,6 +278,7 @@ export class Game {
         let result = Math.floor(Math.random() * 4) + 1;
         let selectedRace = this.cards.races.filter(m => m.id == result)[0];
         this.raceCard.set(selectedRace.source);
+        this.raceId.set(selectedRace.id);
         this.hasRace.set(true);
     }
 
@@ -346,15 +352,23 @@ export class Game {
         let selectItem = itemCards.filter(c => c.id === id)[0];
         
         if(selectItem.isWeapon) {
-            this.hasWeapon.set(true);
-            this.weaponCard.set(selectItem.source);
-            this.damage.set(this.level() + selectItem.attack);
+            console.log(this.classId(), selectItem.equipInClass);
+
+            if(this.classId() == selectItem.equipInClass) {
+                this.hasWeapon.set(true);
+                this.weaponCard.set(selectItem.source);
+                this.damage.set(this.level() + selectItem.attack);
+            } else {
+                this.showMessage("Essa arma não equipa na sua classe!");
+                this.showBag.set(false);
+                return;
+            }
         }
 
         this.bagCards.update(cards => {
             const index = cards.findIndex(c => c.id === id);
 
-            if (index !== -1) {
+            if (index !== -1) {-
                 cards.splice(index, 1);
             }
 
