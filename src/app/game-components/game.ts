@@ -47,6 +47,7 @@ export class Game {
     alertMessage = signal("");
     messageModal = signal("");
     showChangeModal = signal(false);
+    newItensConfirmed = signal(false);
 
     // Atributes
     totalhp = signal(25);
@@ -312,7 +313,6 @@ export class Game {
         for (let index = 0; index < qtdItens; index++) {
             let itemId = Math.floor(Math.random() * 26) + 1;
             let card = itemCards.find(c => c.id == itemId)!;
-            this.bagCards.update(cards => [...cards, card]);
             
             this.chestReceivedItens.update(cards => [...cards, card]);
         }
@@ -320,7 +320,6 @@ export class Game {
         for (let index = 0; index < qtdPedras; index++) {
             let itemId = Math.floor(Math.random() * 4) + 1;
             let card = stoneCards.find(c => c.id == itemId)!;
-            this.bagStones.update(cards => [...cards, card]);
             
             this.chestReceivedItens.update(cards => [...cards, card]);
         }
@@ -331,9 +330,22 @@ export class Game {
         this.modalOpen.set(true);
     }
 
-    closeNewItems() {
+    closeNewItems(confirmed: boolean) {
+        if(confirmed) {
+            let newStones = this.chestReceivedItens().filter(c => c.isStone == true);
+            let newItems = this.chestReceivedItens().filter(c => c.isStone == false);
+
+            this.bagCards.update(cards => [...cards, ...newItems]);
+            this.bagStones.update(stones => [...stones, ...newStones]);
+        }
+    
         this.modalOpen.set(false);
         this.chestReceivedItens.set([]);
+        this.newItensConfirmed.set(false);
+    }
+
+    confirmedNewItems() {
+        this.newItensConfirmed.set(true);
     }
 
     //Bag Control

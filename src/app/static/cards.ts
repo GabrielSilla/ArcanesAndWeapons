@@ -65,10 +65,10 @@ export class Cards {
     ];
 
     public stones = [
-        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0),
-        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0),
-        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0),
-        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0),
+        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0, 0, true),
+        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0, 0, true),
+        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0, 0, true),
+        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, 0 , true),
     ];
 
     public magic = [

@@ -95,18 +95,29 @@
 
 <ion-card class="new-items" *ngIf="modalOpen()">
   <ion-card-header>
-    <ion-card-title>Novos Itens Recebidos!</ion-card-title>
+    <ion-card-title [class]="newItensConfirmed() ? '': 'small-info'">{{ newItensConfirmed() ? 'Novos Itens Recebidos!' : 'A batalha já se encerrou?' }}</ion-card-title>
   </ion-card-header>
 
-  <div class="new-item-content">
-    <ion-card-content *ngFor="let item of chestReceivedItens()">
-        &bull; {{item.name}}
-    </ion-card-content>
+  <div *ngIf="newItensConfirmed()">
+    <div class="new-item-content">
+        <ion-card-content *ngFor="let item of chestReceivedItens()">
+            &bull; {{item.name}}
+        </ion-card-content>
+    </div>
+
+    <div class="new-item-close">
+        <ion-button shape="round" size="small" fill="outline" (click)="closeNewItems(true)">
+            <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+        </ion-button>
+    </div>
   </div>
 
-  <div class="new-item-close">
-    <ion-button shape="round" size="small" fill="outline" (click)="closeNewItems()">
-        <ion-icon slot="icon-only" name="close-circle-outline"></ion-icon>
+  <div class="confirmation-modal" *ngIf="!newItensConfirmed()">
+    <ion-button shape="round" fill="outline" size="small"  class="" (click)="closeNewItems(false)">
+        Não
+    </ion-button>
+    <ion-button shape="round" fill="outline" size="small"  class="" (click)="confirmedNewItems()">
+        Sim
     </ion-button>
   </div>
 </ion-card>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { ModalController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 
@@ -10,10 +10,14 @@ import { CommonModule } from '@angular/common';
 })
 export class ModalItensComponent {
   @Input() items: any[] = [];
+  @Output() closed = new EventEmitter<boolean>();
+
+  hasConfirmed = signal(false);
 
   constructor(private modalCtrl: ModalController) {}
 
   close() {
     this.modalCtrl.dismiss(true);
+    this.closed.emit(this.hasConfirmed());
   }
 }
