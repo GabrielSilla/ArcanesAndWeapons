@@ -4,6 +4,8 @@ import { Game } from './game-components/game';
 import { IonicModule } from '@ionic/angular';
 import { InitScreen } from "./game-components/init-screen/init-screen";
 import { single } from 'rxjs';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { KeepAwake } from '@capacitor-community/keep-awake';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +44,9 @@ export class App {
       this.bgN.set(result);
   }
 
-  InitScreen() {
+  async InitScreen() {
+    await ScreenOrientation.lock({ orientation: 'portrait' });
+    await KeepAwake.keepAwake();
     this.showInit.set(true);
     this.initImg.set(this.logoImg);
     
