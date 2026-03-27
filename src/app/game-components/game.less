@@ -216,13 +216,28 @@ ion-icon {
 }
 
 .card-view {
-    overflow: hidden;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: env(safe-area-inset-top, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-left: env(safe-area-inset-left, 0);
+    box-sizing: border-box;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.55);
 
     img {
-        max-height: 95%;
-        justify-self: anchor-center;
-        position: absolute;
-        align-self: anchor-center;
+        display: block;
+        max-width: min(95vw, 520px);
+        max-height: 85vh;
+        max-height: min(92vh, calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 24px));
+        width: auto;
+        height: auto;
+        object-fit: contain;
     }
 }
 

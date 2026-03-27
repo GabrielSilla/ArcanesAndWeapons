@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { ActionConfig } from "./action-config/action-config";
@@ -8,10 +8,13 @@ import { CardModel } from '../static/card-model';
 import { ModalItensComponent } from './modal-itens/modal-itens';
 import { ModalController } from '@ionic/angular';
 import { Bag } from "./bag/bag";
-import { single } from 'rxjs';
 import { MagicCardModel } from '../static/magic-card-model';
 import { Messages } from './messages/messages';
 import { ItemChange } from './item-change/item-change';
+import {
+    GamePersistenceService,
+    type SessionSnapshot,
+} from '../services/game-persistence.service';
 
 @Component({
   selector: 'app-game',
@@ -22,7 +25,73 @@ import { ItemChange } from './item-change/item-change';
 })
 export class Game {
 
-    constructor(private modalCtrl: ModalController) {}
+    private readonly persistence = inject(GamePersistenceService);
+
+    constructor(private modalCtrl: ModalController) {
+        const snapshot = this.persistence.load();
+        if (snapshot) {
+            this.applySnapshot(snapshot);
+        }
+        effect(() => {
+            this.persistence.saveDebounced(this.buildSnapshot());
+        });
+    }
+
+    private buildSnapshot(): SessionSnapshot {
+        return {
+            schemaVersion: 1,
+            totalhp: this.totalhp(),
+            hp: this.hp(),
+            level: this.level(),
+            dice: this.dice(),
+            diceRolled: this.diceRolled(),
+            damage: this.damage(),
+            hasClass: this.hasClass(),
+            classId: this.classId(),
+            classCard: this.classCard(),
+            hasRace: this.hasRace(),
+            raceId: this.raceId(),
+            raceCard: this.raceCard(),
+            hasWeapon: this.hasWeapon(),
+            weaponCard: this.weaponCard(),
+            hasSlave: this.hasSlave(),
+            slaveCard: this.slaveCard(),
+            hasVD: this.hasVD(),
+            vdCard: this.vdCard(),
+            hasMagic: this.magicCards().length > 0,
+            magicCards: this.magicCards(),
+            tableCards: this.tableCards(),
+            bagCards: this.bagCards(),
+            bagStones: this.bagStones(),
+        };
+    }
+
+    private applySnapshot(s: SessionSnapshot): void {
+        this.totalhp.set(s.totalhp);
+        this.hp.set(s.hp);
+        this.level.set(s.level);
+        this.dice.set(s.dice);
+        this.diceRolled.set(false);
+        this.damage.set(s.damage);
+        this.selectedCard.set('');
+        this.hasClass.set(s.hasClass);
+        this.classId.set(s.classId);
+        this.classCard.set(s.classCard);
+        this.hasRace.set(s.hasRace);
+        this.raceId.set(s.raceId);
+        this.raceCard.set(s.raceCard);
+        this.hasWeapon.set(s.hasWeapon);
+        this.weaponCard.set(s.weaponCard);
+        this.hasSlave.set(s.hasSlave);
+        this.slaveCard.set(s.slaveCard);
+        this.hasVD.set(s.hasVD);
+        this.vdCard.set(s.vdCard);
+        this.magicCards.set(s.magicCards);
+        this.hasMagic.set(s.magicCards.length > 0);
+        this.tableCards.set(s.tableCards);
+        this.bagCards.set(s.bagCards);
+        this.bagStones.set(s.bagStones);
+    }
 
     protected readonly title = signal('aa-game');
 
@@ -85,7 +154,7 @@ export class Game {
     vdCardsForCarousel = signal([]);
     magicCardsForCarousel = signal<MagicCardModel[]>([]);
     storeSpellCards = signal<MagicCardModel[]>([]);
-    tableCards = signal([]);
+    tableCards = signal<unknown[]>([]);
 
     bagCards = signal<CardModel[]>([]);
     bagStones = signal<CardModel[]>([]);
@@ -207,6 +276,7 @@ export class Game {
 
             this.storeSpellCards.set([]);
             this.magicCards.update(cards => [...cards, chosenSpell]);
+            this.hasMagic.set(this.magicCards().length > 0);
         } else {
             this.storeSpellCards.set([]);
         }
@@ -380,7 +450,7 @@ export class Game {
         this.bagCards.update(cards => {
             const index = cards.findIndex(c => c.id === id);
 
-            if (index !== -1) {-
+            if (index !== -1) {
                 cards.splice(index, 1);
             }
 
@@ -447,15 +517,15 @@ export class Game {
         this.hasVD.set(false);
         this.vdCard.set("");
 
-        this.tableCards.set([]); 
+        this.hasMagic.set(false);
+        this.tableCards.set([]);
         this.bagCards.set([]);
         this.bagStones.set([]);
         this.magicCards.set([]);
-
-        this.magicCards.set([]);
         this.magicCardsForCarousel.set([]);
         this.storeSpellCards.set([]);
-   }
+        this.persistence.clear();
+    }
 
    resetWithFlash() {
         this.flashActive.set(true);
