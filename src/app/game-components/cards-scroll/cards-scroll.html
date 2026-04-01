@@ -1,6 +1,25 @@
 <div *ngIf="cards.length > 0" class="cards-overlay">
 </div>
 
+<div *ngIf="cards.length > 0 && type === 'cart'" class="stone-view-cart-top">
+    <div>
+        <ion-img src="/assets/cards/magic/arcane-stone.png"></ion-img>
+        <ion-badge color="primary">{{ getArcaneStones() }}</ion-badge>
+    </div>
+    <div>
+        <ion-img src="/assets/cards/magic/death-stone.png"></ion-img>
+        <ion-badge color="primary">{{ getDeathStones() }}</ion-badge>
+    </div>
+    <div>
+        <ion-img src="/assets/cards/magic/elemental-stone.png"></ion-img>
+        <ion-badge color="primary">{{ getElementalStones() }}</ion-badge>
+    </div>
+    <div>
+        <ion-img src="/assets/cards/magic/holy-stone.png"></ion-img>
+        <ion-badge color="primary">{{ getHolyStones() }}</ion-badge>
+    </div>
+</div>
+
 <div *ngIf="cards.length > 0" class="cards-container" #carousel>
     <div class="card"  *ngFor="let card of cards; let i = index"
         [class.active]="i === activeIndex()"

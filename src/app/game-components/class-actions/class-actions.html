@@ -8,19 +8,23 @@
     ></ion-icon>
   </div>
 
-  <ion-modal [isOpen]="modalOpen()" (didDismiss)="onModalDismiss()">
+  <ion-modal
+    class="class-actions-modal"
+    [isOpen]="modalOpen()"
+    (didDismiss)="onModalDismiss()"
+  >
     <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>{{ modalTitle() }}</ion-title>
+      <ion-header class="class-actions-modal-header">
+        <ion-toolbar class="class-actions-modal-toolbar">
+          <ion-title class="class-actions-modal-title">{{ modalTitle() }}</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="closeModal()">Fechar</ion-button>
+            <ion-button class="class-actions-modal-close" (click)="closeModal()">Fechar</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding class-actions-content">
-        <ion-list lines="full">
-          <ion-item *ngFor="let a of abilities()">
+      <ion-content class="ion-padding class-actions-content class-actions-modal-content">
+        <ion-list lines="none" class="class-actions-list">
+          <ion-item *ngFor="let a of abilities()" class="class-actions-item">
             <ion-label class="ion-text-wrap">
               <h2>{{ a.name }}</h2>
               <p>{{ previewLine(a) }}</p>

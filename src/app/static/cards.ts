@@ -7,7 +7,9 @@ export class Cards {
         new CardModel(1, "Curandeiro", '/assets/cards/classes/curandeiro-min.png', false, 0),
         new CardModel(2, "Guerreiro", '/assets/cards/classes/guerreiro-min.png', false, 0),
         new CardModel(3, "Ladino", '/assets/cards/classes/ladino-min.png', false, 0),
-        new CardModel(4, "Mago", '/assets/cards/classes/mago-min.png', false, 0)
+        new CardModel(4, "Mago", '/assets/cards/classes/mago-min.png', false, 0),
+        new CardModel(5, "Caçador", '/assets/cards/classes/cacador-min.png', false, 0),
+        new CardModel(6, "Cruzado", '/assets/cards/classes/cruzado-min.png', false, 0),
     ];
 
     public races = [
@@ -37,18 +39,18 @@ export class Cards {
     ];
 
     public itens = [
-        new CardModel(1, "Adaga Básica", '/assets/cards/itens/adaga-basica.png', true, 1, 3),
-        new CardModel(2, "Adaga do Adepto", '/assets/cards/itens/adaga-adepto.png', true, 2, 3),
-        new CardModel(3, "Adaga Avançada", '/assets/cards/itens/adaga-avancada.png', true, 3, 3),
-        new CardModel(4, "Cajado Básico", '/assets/cards/itens/cajado-basico.png', true, 1, 1),
-        new CardModel(5, "Cajado do Adepto", '/assets/cards/itens/cajado-adepto.png', true, 2, 1),
-        new CardModel(6, "Cajado Avançado", '/assets/cards/itens/cajado-avancado.png', true, 3, 1),
-        new CardModel(7, "Espada Básica", '/assets/cards/itens/espada-basica.png', true, 1, 2),
-        new CardModel(8, "Espada do Adepto", '/assets/cards/itens/espada-adepto.png', true, 2, 2),
-        new CardModel(9, "Espada Avançada", '/assets/cards/itens/espada-avancada.png', true, 3, 2),
-        new CardModel(10, "Tomo Básico", '/assets/cards/itens/tomo-basico.png', true, 1, 4),
-        new CardModel(11, "Tomo do Adepto", '/assets/cards/itens/tomo-adepto.png', true, 2, 4),
-        new CardModel(12, "Tomo Avançado", '/assets/cards/itens/tomo-avancado.png', true, 3, 4),
+        new CardModel(1, "Adaga Básica", '/assets/cards/itens/adaga-basica.png', true, 1, 'melee', 3),
+        new CardModel(2, "Adaga do Adepto", '/assets/cards/itens/adaga-adepto.png', true, 2, 'melee', 3),
+        new CardModel(3, "Adaga Avançada", '/assets/cards/itens/adaga-avancada.png', true, 3, 'melee', 3),
+        new CardModel(4, "Cajado Básico", '/assets/cards/itens/cajado-basico.png', true, 1, 'magic', 1),
+        new CardModel(5, "Cajado do Adepto", '/assets/cards/itens/cajado-adepto.png', true, 2, 'magic', 1),
+        new CardModel(6, "Cajado Avançado", '/assets/cards/itens/cajado-avancado.png', true, 3, 'magic', 1),
+        new CardModel(7, "Espada Básica", '/assets/cards/itens/espada-basica.png', true, 1, 'melee', 2),
+        new CardModel(8, "Espada do Adepto", '/assets/cards/itens/espada-adepto.png', true, 2, 'melee', 2),
+        new CardModel(9, "Espada Avançada", '/assets/cards/itens/espada-avancada.png', true, 3, 'melee', 2),
+        new CardModel(10, "Tomo Básico", '/assets/cards/itens/tomo-basico.png', true, 1, 'magic', 4),
+        new CardModel(11, "Tomo do Adepto", '/assets/cards/itens/tomo-adepto.png', true, 2, 'magic', 4),
+        new CardModel(12, "Tomo Avançado", '/assets/cards/itens/tomo-avancado.png', true, 3, 'magic', 4),
         new CardModel(13, "Bomba de Fumaça", '/assets/cards/itens/bomba-fumaca.png', false, 0),
         new CardModel(14, "Coração de Dragão", '/assets/cards/itens/coracao-dragao.png', false, 0),
         new CardModel(15, "Óleo de Lentidão", '/assets/cards/itens/oleo-lentidao.png', false, 0),
@@ -62,14 +64,20 @@ export class Cards {
         new CardModel(23, "Poção de Resistência", '/assets/cards/itens/pocao-resistencia.png', false, 0),
         new CardModel(24, "Poção da Vida", '/assets/cards/itens/pocao-reviver.png', false, 0),
         new CardModel(25, "Veneno Maior", '/assets/cards/itens/veneno-maior.png', false, 0),
-        new CardModel(26, "Veneno Menor", '/assets/cards/itens/veneno-menor.png', false, 0)
+        new CardModel(26, "Veneno Menor", '/assets/cards/itens/veneno-menor.png', false, 0),
+        new CardModel(27, "Arco Básico", '/assets/cards/itens/arco-basico.png', true, 1, 'melee', 5),
+        new CardModel(28, "Arco do Adepto", '/assets/cards/itens/arco-adepto.png', true, 2, 'melee', 5),
+        new CardModel(29, "Arco Avançado", '/assets/cards/itens/arco-avancado.png', true, 3, 'melee', 5),
+        new CardModel(30, "Martelo Básico", '/assets/cards/itens/martelo-basico.png', true, 1, 'melee', 6),
+        new CardModel(31, "Martelo do Adepto", '/assets/cards/itens/martelo-adepto.png', true, 2, 'melee', 6),
+        new CardModel(32, "Martelo Avançado", '/assets/cards/itens/martelo-avancado.png', true, 3, 'melee', 6),
     ];
 
     public stones = [
-        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0, 0, true),
-        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0, 0, true),
-        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0, 0, true),
-        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, 0 , true),
+        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0, null, 0, true),
+        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0, null, 0, true),
+        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0, null, 0, true),
+        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, null, 0, true),
     ];
 
 

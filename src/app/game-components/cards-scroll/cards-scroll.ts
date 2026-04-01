@@ -15,6 +15,8 @@ export class CardsScroll implements AfterViewInit {
     @Input() cards: any = [];
     @Input() type: string = "";
     @Input() hasActions: boolean = true;
+    /** Pedras na mochila — só usado na vista `cart` (comprar magias). */
+    @Input() stoneCards: { id: number }[] = [];
     
     @Output() cardSelected = new EventEmitter<void>();
     
@@ -88,5 +90,21 @@ export class CardsScroll implements AfterViewInit {
 
     close() {
         this.cardSelected.emit();
+    }
+
+    getArcaneStones(): number {
+        return this.stoneCards.filter((c) => c.id === 1).length;
+    }
+
+    getDeathStones(): number {
+        return this.stoneCards.filter((c) => c.id === 2).length;
+    }
+
+    getElementalStones(): number {
+        return this.stoneCards.filter((c) => c.id === 3).length;
+    }
+
+    getHolyStones(): number {
+        return this.stoneCards.filter((c) => c.id === 4).length;
     }
 }

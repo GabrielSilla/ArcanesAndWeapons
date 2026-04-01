@@ -12,6 +12,8 @@ export interface SessionSnapshot {
   dice: number;
   diceRolled: boolean;
   damage: number;
+  /** Ausente em saves antigos; tratar como 0. */
+  shield?: number;
   hasClass: boolean;
   classId: number;
   classCard: string;
@@ -47,6 +49,13 @@ function isValidSnapshot(v: unknown): v is SessionSnapshot {
   const b = (k: string) => typeof v[k] === 'boolean';
   const s = (k: string) => typeof v[k] === 'string';
   if (!n('totalhp') || !n('hp') || !n('level') || !n('dice') || !n('damage')) return false;
+  if (
+    'shield' in v &&
+    v['shield'] !== undefined &&
+    typeof v['shield'] !== 'number'
+  ) {
+    return false;
+  }
   if (!b('diceRolled')) return false;
   if (!b('hasClass') || !n('classId') || !s('classCard')) return false;
   if (!b('hasRace') || !n('raceId') || !s('raceCard')) return false;

@@ -4,7 +4,13 @@
 
 <app-cards-scroll [cards]="vdCardsForCarousel()" [type]="'vd'" (cardSelected)="selectedVD($event)"></app-cards-scroll>
 <app-cards-scroll [cards]="magicCardsForCarousel()" [type]="'none'" [hasActions]="false" (cardSelected)="closeMagicView()"></app-cards-scroll>
-<app-cards-scroll [cards]="storeSpellCards()" [type]="'cart'" [hasActions]="true" (cardSelected)="chooseCardToBuy($event)"></app-cards-scroll>
+<app-cards-scroll
+    [cards]="storeSpellCards()"
+    [type]="'cart'"
+    [hasActions]="true"
+    [stoneCards]="bagStones()"
+    (cardSelected)="chooseCardToBuy($event)"
+></app-cards-scroll>
 <app-bag [showBag]="showBag()" [bagCards]="bagCards()" [stoneCards]="bagStones()" (closed)="closedBag()" (usedItem)="selectedAnItem($event)"></app-bag>
 
 <app-action-config [showActionSheet]="showActionSheet()" (closed)="onActionSheetClosed()" (action)="onActionSheetSelected($event)"></app-action-config>
@@ -56,13 +62,23 @@
             <div class="attack-icon primary"></div>
             <ion-label class="info" color="primary">{{damage()}}</ion-label>
         </div>
+        <div class="shield-view">
+            <ion-icon class="shield-icon" name="shield-outline" color="primary"></ion-icon>
+            <ion-label class="info" color="primary">{{shield()}}</ion-label>
+            <ion-button size="small" fill="outline" shape="round" class="plus" (click)="shieldPlus()">
+                <ion-icon slot="icon-only" name="chevron-up-circle-outline"></ion-icon>
+            </ion-button>
+            <ion-button size="small" fill="outline" shape="round" class="minus" (click)="shieldMinus()">
+                <ion-icon slot="icon-only" name="chevron-down-circle-outline"></ion-icon>
+            </ion-button>
+        </div>
         <div class="config-view">
             <ion-icon id="config-btn" name="ellipsis-vertical-circle" (click)="showActionSheet.set(true)"></ion-icon>
         </div>
         <app-class-actions
             [classId]="classId()"
             [baseDamage]="damage()"
-            [visible]="hasClass() && classId() >= 1 && classId() <= 4 && dice() === 0 && selectedCard() === ''"
+            [visible]="hasClass() && classId() >= 1 && classId() <= 6 && dice() === 0 && selectedCard() === ''"
         ></app-class-actions>
     </div>
     <div *ngIf="dice() == 0 && selectedCard() == ''" class="right-top-view">
@@ -100,7 +116,7 @@
                 (click)="openServantPicker(); $event.stopPropagation()"
             >Adicionar</ion-button>
             <ng-container *ngIf="hasSlave(); else noSlaveSlot">
-                <div class="slave-card-wrap">
+                <div class="slave-card-wrap" [class.slave-card-dying]="slaveDying()">
                     <ion-img [src]="slaveCard()"></ion-img>
                     <div
                         class="slave-card-actions"
@@ -145,7 +161,7 @@
                             size="small"
                             fill="solid"
                             aria-label="Remover lacaio"
-                            (click)="clearSlave()"
+                            (click)="clearSlaveWithDeathFx()"
                         >
                             <ion-icon slot="icon-only" name="close-outline"></ion-icon>
                         </ion-button>

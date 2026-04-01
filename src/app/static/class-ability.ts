@@ -5,7 +5,7 @@ export type ClassDamageFormula =
     | 'base_plus_half'
     | 'base_plus_quarter'
     | 'none'
-    /** Redução de dano recebido: ⌊2º d20/2⌋ (após teste ≥ 10) */
+    /** Redução de dano recebido: ⌈2º d20/2⌉ (após teste ≥ 10) */
     | 'reduce_half';
 
 export interface ClassAbility {
@@ -22,7 +22,7 @@ export function rollD20(): number {
 }
 
 export function bonusFromHalf(roll: number): number {
-    return Math.floor(roll / 2);
+    return Math.ceil(roll / 2);
 }
 
 export function bonusFromQuarter(roll: number): number {

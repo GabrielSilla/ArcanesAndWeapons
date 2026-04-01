@@ -9,6 +9,7 @@ function minimalSnapshot(overrides: Partial<SessionSnapshot> = {}): SessionSnaps
     dice: 0,
     diceRolled: false,
     damage: 3,
+    shield: 0,
     hasClass: true,
     classId: 4,
     classCard: '/assets/cards/classes/mago-min.png',

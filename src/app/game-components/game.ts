@@ -9,6 +9,7 @@ import type { ServantCardModel } from '../static/servant-card-model';
 import {
     getServantDamage,
 } from '../static/servant-rules';
+import { canEquipWeapon, weaponDamageBonus } from '../static/weapon-rules';
 import { ModalItensComponent } from './modal-itens/modal-itens';
 import { ModalController } from '@ionic/angular';
 import { Bag } from "./bag/bag";
@@ -52,6 +53,7 @@ export class Game {
             dice: this.dice(),
             diceRolled: this.diceRolled(),
             damage: this.damage(),
+            shield: this.shield(),
             hasClass: this.hasClass(),
             classId: this.classId(),
             classCard: this.classCard(),
@@ -82,6 +84,7 @@ export class Game {
         this.dice.set(s.dice);
         this.diceRolled.set(false);
         this.damage.set(s.damage);
+        this.shield.set(s.shield ?? 0);
         this.selectedCard.set('');
         this.hasClass.set(s.hasClass);
         this.classId.set(s.classId);
@@ -152,7 +155,8 @@ export class Game {
     dice = signal(0);
     diceRolled = signal(false);
     damage = signal(this.level());
-    
+    shield = signal(0);
+
     // Cards Control
     cards = new Cards();
 
@@ -174,6 +178,10 @@ export class Game {
     slaveId = signal(0);
     slaveCurrentHp = signal<number | null>(null);
     slaveTurnsRemaining = signal<number | null>(null);
+    /** Efeito visual ao zerar HP ou turnos (antes de limpar o servo). */
+    slaveDying = signal(false);
+    private slaveDeathFxTimer: ReturnType<typeof setTimeout> | null = null;
+    private static readonly SLAVE_DEATH_MS = 520;
 
     hasVD = signal(false);
     vdCard = signal("");
@@ -246,6 +254,16 @@ export class Game {
             this.totalhp.set(this.totalhp() - 5);
             this.hp.set(this.hp() - 5);
             this.damage.set(this.damage() - 1);
+        }
+    }
+
+    shieldPlus() {
+        this.shield.set(this.shield() + 1);
+    }
+
+    shieldMinus() {
+        if (this.shield() > 0) {
+            this.shield.set(this.shield() - 1);
         }
     }
 
@@ -369,12 +387,39 @@ export class Game {
         }
     }
 
-    clearSlave(): void {
+    private cancelSlaveDeathFx(): void {
+        if (this.slaveDeathFxTimer !== null) {
+            clearTimeout(this.slaveDeathFxTimer);
+            this.slaveDeathFxTimer = null;
+        }
+        this.slaveDying.set(false);
+    }
+
+    private clearSlaveState(): void {
         this.hasSlave.set(false);
         this.slaveCard.set('');
         this.slaveId.set(0);
         this.slaveCurrentHp.set(null);
         this.slaveTurnsRemaining.set(null);
+    }
+
+    /** Remove o servo de imediato (reset, snapshot, botão X, etc.). */
+    clearSlave(): void {
+        this.cancelSlaveDeathFx();
+        this.clearSlaveState();
+    }
+
+    /** Anima a carta e só depois remove o servo (HP/turnos a 0 ou botão X no domado). */
+    clearSlaveWithDeathFx(): void {
+        if (this.slaveDying()) {
+            return;
+        }
+        this.slaveDying.set(true);
+        this.slaveDeathFxTimer = setTimeout(() => {
+            this.slaveDeathFxTimer = null;
+            this.slaveDying.set(false);
+            this.clearSlaveState();
+        }, Game.SLAVE_DEATH_MS);
     }
 
     private applySlaveRuntime(s: SessionSnapshot): void {
@@ -433,7 +478,7 @@ export class Game {
         }
         const next = hp - 1;
         if (next <= 0) {
-            this.clearSlave();
+            this.clearSlaveWithDeathFx();
         } else {
             this.slaveCurrentHp.set(next);
         }
@@ -446,7 +491,7 @@ export class Game {
         }
         const next = t - 1;
         if (next <= 0) {
-            this.clearSlave();
+            this.clearSlaveWithDeathFx();
         } else {
             this.slaveTurnsRemaining.set(next);
         }
@@ -511,7 +556,7 @@ export class Game {
     //SHUFFLE AND SELECTIONS
 
     shuffleClass() {
-        let result = Math.floor(Math.random() * 4) + 1;
+        let result = Math.floor(Math.random() * 6) + 1;
         let selectedClass = this.cards.classes.filter(m => m.id == result)[0];
         this.classCard.set(selectedClass.source);
         this.classId.set(selectedClass.id);
@@ -554,19 +599,16 @@ export class Game {
         let qtdPedras = Math.floor(Math.random() * 2) + 1;
 
         for (let index = 0; index < qtdItens; index++) {
-            let itemId = Math.floor(Math.random() * 26) + 1;
-            let card = itemCards.find(c => c.id == itemId)!;
-            
+            const card = itemCards[Math.floor(Math.random() * itemCards.length)];
             this.chestReceivedItens.update(cards => [...cards, card]);
         }
 
         for (let index = 0; index < qtdPedras; index++) {
-            let itemId = Math.floor(Math.random() * 4) + 1;
-            let card = stoneCards.find(c => c.id == itemId)!;
+            const card = stoneCards[Math.floor(Math.random() * stoneCards.length)];
             
             this.chestReceivedItens.update(cards => [...cards, card]);
         }
-        this.openModal()
+        this.openModal();
     }
 
     openModal() {
@@ -607,14 +649,18 @@ export class Game {
         let selectItem = itemCards.filter(c => c.id === id)[0];
         
         if(selectItem.isWeapon) {
-            console.log(this.classId(), selectItem.equipInClass);
-
-            if(this.classId() == selectItem.equipInClass) {
+            if(canEquipWeapon(this.classId(), selectItem)) {
                 this.hasWeapon.set(true);
                 this.weaponCard.set(selectItem.source);
-                this.damage.set(this.level() + selectItem.attack);
+                this.damage.set(
+                    this.level() +
+                        selectItem.attack +
+                        weaponDamageBonus(this.classId(), selectItem),
+                );
             } else {
-                this.showMessage("Essa arma não equipa na sua classe!");
+                this.showMessage(
+                    'Esta arma não combina com o teu tipo de classe (física/mágica).',
+                );
                 this.showBag.set(false);
                 return;
             }
@@ -672,6 +718,7 @@ export class Game {
         this.level.set(1);
         this.dice.set(0);
         this.damage.set(this.level());
+        this.shield.set(0);
 
         this.selectedCard.set("");
 

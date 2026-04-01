@@ -13,6 +13,8 @@ import { MAGE_ABILITIES, MAGE_CLASS_ID } from '../../static/mage-abilities';
 import { HEALER_ABILITIES, HEALER_CLASS_ID } from '../../static/healer-abilities';
 import { WARRIOR_ABILITIES, WARRIOR_CLASS_ID } from '../../static/warrior-abilities';
 import { ROGUE_ABILITIES, ROGUE_CLASS_ID } from '../../static/rogue-abilities';
+import { HUNTER_ABILITIES, HUNTER_CLASS_ID } from '../../static/hunter-abilities';
+import { CRUSADER_ABILITIES, CRUSADER_CLASS_ID } from '../../static/crusader-abilities';
 
 @Component({
     selector: 'app-class-actions',
@@ -45,6 +47,10 @@ export class ClassActions implements OnChanges {
                 return WARRIOR_ABILITIES;
             case ROGUE_CLASS_ID:
                 return ROGUE_ABILITIES;
+            case HUNTER_CLASS_ID:
+                return HUNTER_ABILITIES;
+            case CRUSADER_CLASS_ID:
+                return CRUSADER_ABILITIES;
             default:
                 return [];
         }
@@ -60,6 +66,10 @@ export class ClassActions implements OnChanges {
                 return 'Ações do Guerreiro';
             case ROGUE_CLASS_ID:
                 return 'Ações do Ladino';
+            case HUNTER_CLASS_ID:
+                return 'Ações do Caçador';
+            case CRUSADER_CLASS_ID:
+                return 'Ações do Cruzado';
             default:
                 return 'Ações de classe';
         }
@@ -90,8 +100,8 @@ export class ClassActions implements OnChanges {
                 return `Dano: ${b}`;
             case 'base_plus_half':
                 return heal
-                    ? `${b} + ⌊d20/2⌋ (cura +0 a +10)`
-                    : `${b} + ⌊d20/2⌋ (bônus +0 a +10)`;
+                    ? `${b} + ⌈d20/2⌉ (cura +1 a +10)`
+                    : `${b} + ⌈d20/2⌉ (bônus +1 a +10)`;
             case 'base_plus_quarter': {
                 const baseLine = heal
                     ? `${b} + ⌊d20/4⌋ (cura +0 a +5)`
@@ -109,7 +119,7 @@ export class ClassActions implements OnChanges {
                     ? 'Sem dano — efeito — conjurar com d20 ≥ ' + CAST_HIT_DC
                     : 'Sem dano — conjurar com d20 ≥ ' + CAST_HIT_DC;
             case 'reduce_half':
-                return `Reduz ⌊d20/2⌋ de dano (0 a 10) — teste d20 ≥ ${CAST_HIT_DC}, depois 2º d20 para a redução`;
+                return `Reduz ⌈d20/2⌉ de dano (1 a 10) — teste d20 ≥ ${CAST_HIT_DC}, depois 2º d20 para a redução`;
         }
     }
 
@@ -165,7 +175,7 @@ export class ClassActions implements OnChanges {
             const redRoll = rollD20();
             const reduction = bonusFromHalf(redRoll);
             this.resultMessage.set(
-                `${ability.name} — Acerto: ${hit} | Redução (2º d20=${redRoll}, ⌊d20/2⌋=${reduction}) — ${reduction} de dano reduzido`,
+                `${ability.name} — Acerto: ${hit} | Redução (2º d20=${redRoll}, ⌈d20/2⌉=${reduction}) — ${reduction} de dano reduzido`,
             );
             return;
         }
@@ -176,11 +186,11 @@ export class ClassActions implements OnChanges {
             const total = base + bonus;
             if (heal) {
                 this.resultMessage.set(
-                    `${ability.name} — Acerto: ${hit} | Cura (2º d20=${dmgRoll}, ⌊d20/2⌋=${bonus}) — Total: ${base} + ${bonus} = ${total}`,
+                    `${ability.name} — Acerto: ${hit} | Cura (2º d20=${dmgRoll}, ⌈d20/2⌉=${bonus}) — Total: ${base} + ${bonus} = ${total}`,
                 );
             } else {
                 this.resultMessage.set(
-                    `${ability.name} — Acerto: ${hit} | Dano (2º d20=${dmgRoll}, ⌊d20/2⌋=${bonus}) — Total: ${base} + ${bonus} = ${total}`,
+                    `${ability.name} — Acerto: ${hit} | Dano (2º d20=${dmgRoll}, ⌈d20/2⌉=${bonus}) — Total: ${base} + ${bonus} = ${total}`,
                 );
             }
             return;
