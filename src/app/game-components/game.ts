@@ -5,6 +5,10 @@ import { ActionConfig } from "./action-config/action-config";
 import { Cards } from '../static/cards';
 import { CardsScroll } from "./cards-scroll/cards-scroll";
 import { CardModel } from '../static/card-model';
+import type { ServantCardModel } from '../static/servant-card-model';
+import {
+    getServantDamage,
+} from '../static/servant-rules';
 import { ModalItensComponent } from './modal-itens/modal-itens';
 import { ModalController } from '@ionic/angular';
 import { Bag } from "./bag/bag";
@@ -59,6 +63,8 @@ export class Game {
             hasSlave: this.hasSlave(),
             slaveCard: this.slaveCard(),
             slaveId: this.slaveId(),
+            slaveCurrentHp: this.slaveCurrentHp(),
+            slaveTurnsRemaining: this.slaveTurnsRemaining(),
             hasVD: this.hasVD(),
             vdCard: this.vdCard(),
             hasMagic: this.magicCards().length > 0,
@@ -88,6 +94,7 @@ export class Game {
         this.hasSlave.set(s.hasSlave);
         this.slaveCard.set(s.slaveCard);
         this.slaveId.set(s.slaveId ?? 0);
+        this.applySlaveRuntime(s);
         this.hasVD.set(s.hasVD);
         this.vdCard.set(s.vdCard);
         this.magicCards.set(s.magicCards);
@@ -165,6 +172,8 @@ export class Game {
     hasSlave = signal(false);
     slaveCard = signal("");
     slaveId = signal(0);
+    slaveCurrentHp = signal<number | null>(null);
+    slaveTurnsRemaining = signal<number | null>(null);
 
     hasVD = signal(false);
     vdCard = signal("");
@@ -329,6 +338,120 @@ export class Game {
         }
     }
 
+    getSlaveCard(): ServantCardModel | null {
+        if (!this.hasSlave() || !this.slaveId()) {
+            return null;
+        }
+        return this.cards.servants.find((c) => c.id === this.slaveId()) ?? null;
+    }
+
+    getSlaveServantDamage(): number {
+        const card = this.getSlaveCard();
+        if (!card) {
+            return 0;
+        }
+        return getServantDamage(card, {
+            playerLevel: this.level(),
+            playerBaseDamage: this.damage(),
+        });
+    }
+
+    private initSlaveRuntime(card: ServantCardModel): void {
+        if (card.kind === 'natural_magic' && card.servantHp != null) {
+            this.slaveCurrentHp.set(card.servantHp);
+            this.slaveTurnsRemaining.set(null);
+        } else if (card.kind === 'necromancy' && card.turnDuration != null) {
+            this.slaveTurnsRemaining.set(card.turnDuration);
+            this.slaveCurrentHp.set(null);
+        } else {
+            this.slaveCurrentHp.set(null);
+            this.slaveTurnsRemaining.set(null);
+        }
+    }
+
+    clearSlave(): void {
+        this.hasSlave.set(false);
+        this.slaveCard.set('');
+        this.slaveId.set(0);
+        this.slaveCurrentHp.set(null);
+        this.slaveTurnsRemaining.set(null);
+    }
+
+    private applySlaveRuntime(s: SessionSnapshot): void {
+        if (!s.hasSlave) {
+            this.slaveCurrentHp.set(null);
+            this.slaveTurnsRemaining.set(null);
+            return;
+        }
+        const sid = s.slaveId ?? 0;
+        if (sid === 0) {
+            this.clearSlave();
+            return;
+        }
+        const card = this.cards.servants.find((c) => c.id === sid);
+        if (!card) {
+            this.slaveCurrentHp.set(null);
+            this.slaveTurnsRemaining.set(null);
+            return;
+        }
+        let hp = s.slaveCurrentHp ?? null;
+        let turns = s.slaveTurnsRemaining ?? null;
+        if (card.kind === 'natural_magic' && hp === null && card.servantHp != null) {
+            hp = card.servantHp;
+        }
+        if (card.kind === 'necromancy' && turns === null && card.turnDuration != null) {
+            turns = card.turnDuration;
+        }
+        if ((hp !== null && hp <= 0) || (turns !== null && turns <= 0)) {
+            this.clearSlave();
+            return;
+        }
+        if (card.kind === 'natural_magic') {
+            this.slaveCurrentHp.set(hp);
+            this.slaveTurnsRemaining.set(null);
+        } else if (card.kind === 'necromancy') {
+            this.slaveCurrentHp.set(null);
+            this.slaveTurnsRemaining.set(turns);
+        } else {
+            this.slaveCurrentHp.set(null);
+            this.slaveTurnsRemaining.set(null);
+        }
+    }
+
+    slaveHpPlus(): void {
+        const hp = this.slaveCurrentHp();
+        if (hp === null) {
+            return;
+        }
+        this.slaveCurrentHp.set(hp + 1);
+    }
+
+    slaveHpMinus(): void {
+        const hp = this.slaveCurrentHp();
+        if (hp === null || hp <= 0) {
+            return;
+        }
+        const next = hp - 1;
+        if (next <= 0) {
+            this.clearSlave();
+        } else {
+            this.slaveCurrentHp.set(next);
+        }
+    }
+
+    slaveTurnMinus(): void {
+        const t = this.slaveTurnsRemaining();
+        if (t === null || t <= 0) {
+            return;
+        }
+        const next = t - 1;
+        if (next <= 0) {
+            this.clearSlave();
+        } else {
+            this.slaveTurnsRemaining.set(next);
+        }
+    }
+
     openServantPicker() {
         this.showServantPicker.set(true);
     }
@@ -343,6 +466,7 @@ export class Game {
             this.hasSlave.set(true);
             this.slaveCard.set(card.source);
             this.slaveId.set(card.id);
+            this.initSlaveRuntime(card);
         }
         this.showServantPicker.set(false);
     }
@@ -560,9 +684,7 @@ export class Game {
         this.hasWeapon.set(false);
         this.weaponCard.set("");
 
-        this.hasSlave.set(false);
-        this.slaveCard.set("");
-        this.slaveId.set(0);
+        this.clearSlave();
 
         this.hasVD.set(false);
         this.vdCard.set("");

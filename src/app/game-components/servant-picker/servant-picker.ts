@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import type { CardModel } from '../../static/card-model';
+import type { ServantCardModel } from '../../static/servant-card-model';
 
 @Component({
     selector: 'app-servant-picker',
@@ -12,7 +12,7 @@ import type { CardModel } from '../../static/card-model';
 })
 export class ServantPicker {
     @Input() isOpen = false;
-    @Input() servants: CardModel[] = [];
+    @Input() servants: ServantCardModel[] = [];
 
     @Output() closed = new EventEmitter<void>();
     @Output() selected = new EventEmitter<number>();

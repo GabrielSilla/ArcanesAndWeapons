@@ -91,7 +91,7 @@
         <div class="card" (click)="weaponCardView(weaponCard())">
             <ion-img [src]="hasWeapon() ? weaponCard() : '/assets/cards/itens/no-weapon.png'"></ion-img>
         </div>
-        <div class="card" (click)="slaveCardView(slaveCard())">
+        <div class="card slave-card-slot" (click)="slaveCardView(slaveCard())">
             <ion-button
                 *ngIf="!hasSlave()"
                 fill="outline"
@@ -99,7 +99,75 @@
                 class="plus"
                 (click)="openServantPicker(); $event.stopPropagation()"
             >Adicionar</ion-button>
-            <ion-img [src]="hasSlave() ? slaveCard() : '/assets/cards/classes/no-slave.png'"></ion-img>
+            <ng-container *ngIf="hasSlave(); else noSlaveSlot">
+                <div class="slave-card-wrap">
+                    <ion-img [src]="slaveCard()"></ion-img>
+                    <div
+                        class="slave-card-actions"
+                        *ngIf="getSlaveCard() as slave"
+                        (click)="$event.stopPropagation()"
+                    >
+                        <ion-button
+                            *ngIf="slave.kind === 'necromancy'"
+                            class="slave-step-btn"
+                            color="primary"
+                            size="small"
+                            fill="solid"
+                            (click)="slaveTurnMinus()"
+                            [disabled]="slaveTurnsRemaining() === null || (slaveTurnsRemaining() ?? 0) <= 0"
+                        >
+                            <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button
+                            *ngIf="slave.kind === 'natural_magic'"
+                            class="slave-step-btn"
+                            color="primary"
+                            size="small"
+                            fill="solid"
+                            (click)="slaveHpMinus()"
+                        >
+                            <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button
+                            *ngIf="slave.kind === 'natural_magic'"
+                            class="slave-step-btn"
+                            color="primary"
+                            size="small"
+                            fill="solid"
+                            (click)="slaveHpPlus()"
+                        >
+                            <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button
+                            *ngIf="slave.kind === 'tamed'"
+                            class="slave-step-btn"
+                            color="primary"
+                            size="small"
+                            fill="solid"
+                            aria-label="Remover lacaio"
+                            (click)="clearSlave()"
+                        >
+                            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+                        </ion-button>
+                    </div>
+                    <div class="slave-card-overlay" (click)="$event.stopPropagation()">
+                        <div class="slave-damage-line">Ataque {{ getSlaveServantDamage() }}</div>
+                        <ng-container *ngIf="getSlaveCard() as slave">
+                            <div *ngIf="slave.kind === 'necromancy'" class="slave-extra-row">
+                                <span class="slave-label">Turnos</span>
+                                <span class="slave-value">{{ slaveTurnsRemaining() }}</span>
+                            </div>
+                            <div *ngIf="slave.kind === 'natural_magic'" class="slave-extra-row">
+                                <span class="slave-label">HP</span>
+                                <span class="slave-value">{{ slaveCurrentHp() }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #noSlaveSlot>
+                <ion-img src="/assets/cards/classes/no-slave.png"></ion-img>
+            </ng-template>
         </div>
         <div class="card" (click)="vdCardView(vdCard())">
             <ion-button *ngIf="!hasVD()"  fill="outline" size="small" class="plus" (click)="selectVD()">Adicionar</ion-button>

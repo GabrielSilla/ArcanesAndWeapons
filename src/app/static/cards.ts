@@ -1,5 +1,6 @@
 import { CardModel } from "./card-model"
 import { MagicCardModel } from "./magic-card-model";
+import { ServantCardModel } from "./servant-card-model";
 
 export class Cards {
     public classes = [
@@ -126,14 +127,14 @@ export class Cards {
         new MagicCardModel(51, "Transfusão Forçada", 'assets/cards/magic/necro/transfusao-forcada.png', 0, 2, 0, 0)
     ];
 
-    public servants = [
-        new CardModel(1, "Aragrog", '/assets/cards/servants/aragrog.png', false, 0),
-        new CardModel(2, "Aranha Espectral", '/assets/cards/servants/aranha-espectral.png', false, 0),
-        new CardModel(3, "Aranha Espreitadora", '/assets/cards/servants/aranha-espreitadora.png', false, 0),
-        new CardModel(4, "Cão Raivoso", '/assets/cards/servants/cao-raivoso.png', false, 0),
-        new CardModel(5, "Esqueleto Inferior", '/assets/cards/servants/esqueleto-inferior.png', false, 0),
-        new CardModel(6, "Esqueleto Superior", '/assets/cards/servants/esqueleto-superior.png', false, 0),
-        new CardModel(7, "Lobo Espetral", '/assets/cards/servants/lobo-espetral.png', false, 0),
-        new CardModel(8, "Lobo Cinzento", '/assets/cards/servants/lobo-lacaio.png', false, 0),
+    public servants: ServantCardModel[] = [
+        new ServantCardModel(1, "Aragrog", '/assets/cards/servants/aragrog.png', 'tamed'),
+        new ServantCardModel(2, "Aranha Espectral", '/assets/cards/servants/aranha-espectral.png', 'natural_magic', { servantHp: 15 }),
+        new ServantCardModel(3, "Aranha Espreitadora", '/assets/cards/servants/aranha-espreitadora.png', 'tamed'),
+        new ServantCardModel(4, "Cão Raivoso", '/assets/cards/servants/cao-raivoso.png', 'tamed'),
+        new ServantCardModel(5, "Esqueleto Inferior", '/assets/cards/servants/esqueleto-inferior.png', 'necromancy', { turnDuration: 3, damageBonus: 0 }),
+        new ServantCardModel(6, "Esqueleto Superior", '/assets/cards/servants/esqueleto-superior.png', 'necromancy', { turnDuration: 5, damageBonus: 5 }),
+        new ServantCardModel(7, "Lobo Espetral", '/assets/cards/servants/lobo-espetral.png', 'natural_magic', { servantHp: 25 }),
+        new ServantCardModel(8, "Lobo Cinzento", '/assets/cards/servants/lobo-lacaio.png', 'tamed'),
     ];
 }

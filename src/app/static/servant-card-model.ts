@@ -1,14 +1,39 @@
 import { CardModel } from './card-model';
 
-/** Espaço reservado para regras de mesa por servo (HP, ações, etc.). */
-export type ServantRules = Record<string, unknown>;
+export type ServantKind = 'natural_magic' | 'tamed' | 'necromancy';
 
-/**
- * Carta de servo/lacaio: base igual às outras cartas + metadados para evolução.
- * Os dados em `cards.ts` podem continuar como `CardModel[]` até migrar entradas.
- */
-export type ServantCardModel = CardModel & { rules?: ServantRules };
+export type ServantCardOpts = {
+    /** natural_magic: max HP pool */
+    servantHp?: number;
+    /** necromancy */
+    turnDuration?: number;
+    /** necromancy: extra damage on top of player base attack */
+    damageBonus?: number;
+};
 
-export function toServantCard(card: CardModel, rules?: ServantRules): ServantCardModel {
-    return rules !== undefined ? Object.assign(card, { rules }) : (card as ServantCardModel);
+export class ServantCardModel extends CardModel {
+    readonly kind: ServantKind;
+    readonly servantHp?: number;
+    readonly turnDuration?: number;
+    readonly damageBonus?: number;
+
+    constructor(
+        id: number,
+        name: string,
+        source: string,
+        kind: ServantKind,
+        opts: ServantCardOpts = {}
+    ) {
+        super(id, name, source, false, 0, 0, false);
+        this.kind = kind;
+        if (opts.servantHp !== undefined) {
+            this.servantHp = opts.servantHp;
+        }
+        if (opts.turnDuration !== undefined) {
+            this.turnDuration = opts.turnDuration;
+        }
+        if (opts.damageBonus !== undefined) {
+            this.damageBonus = opts.damageBonus;
+        }
+    }
 }

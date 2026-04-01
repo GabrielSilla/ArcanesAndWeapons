@@ -50,6 +50,97 @@
         position: relative;
     }
 
+    .slave-card-slot {
+        .slave-card-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        .slave-card-wrap ion-img {
+            width: 100%;
+            display: block;
+        }
+
+        .slave-card-actions {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            left: auto;
+            top: auto;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+            pointer-events: none;
+        }
+
+        .slave-card-actions ion-button {
+            position: relative;
+            top: auto;
+            left: auto;
+            right: auto;
+            transform: none;
+            pointer-events: auto;
+            margin: 0;
+        }
+
+        .slave-card-overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            padding: 4px 5px 5px;
+            background: rgba(12, 10, 8, 0.82);
+            color: #f0e6d4;
+            font-family: "MedievalSharpBook", serif;
+            font-size: 11px;
+            line-height: 1.25;
+            border-radius: 0 0 2px 2px;
+        }
+
+        .slave-damage-line {
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .slave-extra-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 2px;
+        }
+
+        .slave-label {
+            opacity: 0.9;
+            margin-right: 2px;
+        }
+
+        .slave-value {
+            min-width: 1.2em;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .slave-step-btn {
+            --padding-start: 0;
+            --padding-end: 0;
+            margin: 0;
+            width: 20px;
+            height: 20px;
+            min-height: 20px;
+            min-width: 20px;
+            --border-radius: 3px;
+            font-size: 9px;
+        }
+
+        .slave-step-btn ion-icon {
+            color: #000000 !important;
+            font-size: 12px;
+        }
+    }
+
     ion-button {
         font-family: "MedievalSharpBook";
         font-size: 12px;

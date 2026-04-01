@@ -24,6 +24,9 @@ export interface SessionSnapshot {
   slaveCard: string;
   /** Opcional em saves antigos; ausente = 0 */
   slaveId?: number;
+  /** Estado do servo na mesa; ausente em saves antigos */
+  slaveCurrentHp?: number | null;
+  slaveTurnsRemaining?: number | null;
   hasVD: boolean;
   vdCard: string;
   hasMagic: boolean;
