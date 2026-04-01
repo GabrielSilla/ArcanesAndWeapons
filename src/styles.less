@@ -78,3 +78,82 @@ html, body {
     border: 1px solid rgba(255, 60, 60, 0.2);
   }
 }
+
+/**
+ * Modal de lacaios: o ion-modal é renderizado no overlay (fora do host do componente),
+ * por isso o tema RPG tem de estar aqui — não herda do encapsulamento do ServantPicker.
+ */
+ion-modal.servant-picker-modal {
+  --width: 100%;
+  --height: 100%;
+  --max-width: 100%;
+  --max-height: 100%;
+  --border-radius: 0;
+  --box-shadow: none;
+  --background: #12100c;
+}
+
+ion-modal.servant-picker-modal .ion-page {
+  background: linear-gradient(180deg, #1e1a14 0%, #12100c 100%);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+ion-modal.servant-picker-modal ion-header.servant-picker-header {
+  --background: transparent;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+
+ion-modal.servant-picker-modal ion-toolbar.servant-picker-toolbar {
+  --background: linear-gradient(180deg, rgba(42, 36, 28, 0.98) 0%, rgba(24, 20, 16, 0.99) 100%);
+  --border-width: 0 0 1px 0;
+  --border-style: solid;
+  --border-color: rgba(var(--ion-color-primary-rgb), 0.35);
+  --min-height: 52px;
+  --padding-top: env(safe-area-inset-top, 0px);
+  --padding-start: 12px;
+  --padding-end: 8px;
+}
+
+ion-modal.servant-picker-modal ion-title.servant-picker-title {
+  --color: #eecda3;
+  color: #eecda3;
+  font-family: 'MedievalSharpBook', serif;
+  font-size: 1.05rem;
+  font-weight: normal;
+  letter-spacing: 0.04em;
+}
+
+ion-modal.servant-picker-modal ion-button.servant-picker-close {
+  --color: #f7d7a8;
+  font-family: 'MedievalSharpBook', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+ion-modal.servant-picker-modal ion-content.servant-picker-content {
+  --background: linear-gradient(180deg, #18140f 0%, #0e0c0a 100%);
+  --color: #e8dcc8;
+  --padding-start: max(12px, env(safe-area-inset-left));
+  --padding-end: max(12px, env(safe-area-inset-right));
+  --padding-bottom: max(12px, env(safe-area-inset-bottom));
+  flex: 1;
+}
+
+/**
+ * Alert de reset: overlay global — o conteúdo está no shadow do ion-alert;
+ * título usa --ion-text-color; mensagem usa --ion-color-step-550 (MD).
+ */
+ion-alert.rpg-reset-alert {
+  --background: linear-gradient(180deg, rgba(38, 32, 26, 0.99) 0%, rgba(22, 18, 14, 0.995) 100%);
+  --max-width: min(92vw, 440px);
+  --backdrop-opacity: 0.55;
+  --ion-text-color: #eecda3;
+  --ion-color-step-550: #c9b896;
+  --ion-color-step-150: rgba(var(--ion-color-primary-rgb), 0.28);
+  font-family: 'MedievalSharpBook', serif;
+  font-size: 0.95rem;
+}

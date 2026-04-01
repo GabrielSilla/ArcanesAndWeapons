@@ -22,6 +22,8 @@ export interface SessionSnapshot {
   weaponCard: string;
   hasSlave: boolean;
   slaveCard: string;
+  /** Opcional em saves antigos; ausente = 0 */
+  slaveId?: number;
   hasVD: boolean;
   vdCard: string;
   hasMagic: boolean;

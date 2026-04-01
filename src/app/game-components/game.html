@@ -8,7 +8,21 @@
 <app-bag [showBag]="showBag()" [bagCards]="bagCards()" [stoneCards]="bagStones()" (closed)="closedBag()" (usedItem)="selectedAnItem($event)"></app-bag>
 
 <app-action-config [showActionSheet]="showActionSheet()" (closed)="onActionSheetClosed()" (action)="onActionSheetSelected($event)"></app-action-config>
+<ion-alert
+  class="rpg-reset-alert"
+  [isOpen]="showResetConfirm()"
+  header="Resetar partida?"
+  message="Todo o progresso será apagado. Esta ação não pode ser desfeita."
+  [buttons]="resetConfirmButtons"
+  (didDismiss)="onResetAlertDismiss()"
+></ion-alert>
 <app-item-change [show]="showChangeModal()" [bagItens]="bagCards()" (return)="changeSent($event)"></app-item-change>
+<app-servant-picker
+    [isOpen]="showServantPicker()"
+    [servants]="cards.servants"
+    (closed)="onServantPickerClosed()"
+    (selected)="onServantPicked($event)"
+></app-servant-picker>
 
 <div>
     <div *ngIf="dice() > 0" class="dice-mask">
@@ -45,6 +59,11 @@
         <div class="config-view">
             <ion-icon id="config-btn" name="ellipsis-vertical-circle" (click)="showActionSheet.set(true)"></ion-icon>
         </div>
+        <app-class-actions
+            [classId]="classId()"
+            [baseDamage]="damage()"
+            [visible]="hasClass() && classId() >= 1 && classId() <= 4 && dice() === 0 && selectedCard() === ''"
+        ></app-class-actions>
     </div>
     <div *ngIf="dice() == 0 && selectedCard() == ''" class="right-top-view">
         <div class="dice-view">
@@ -72,8 +91,14 @@
         <div class="card" (click)="weaponCardView(weaponCard())">
             <ion-img [src]="hasWeapon() ? weaponCard() : '/assets/cards/itens/no-weapon.png'"></ion-img>
         </div>
-        <div class="card">
-            <!--<ion-button fill="outline" size="small" class="plus">Adicionar</ion-button>-->
+        <div class="card" (click)="slaveCardView(slaveCard())">
+            <ion-button
+                *ngIf="!hasSlave()"
+                fill="outline"
+                size="small"
+                class="plus"
+                (click)="openServantPicker(); $event.stopPropagation()"
+            >Adicionar</ion-button>
             <ion-img [src]="hasSlave() ? slaveCard() : '/assets/cards/classes/no-slave.png'"></ion-img>
         </div>
         <div class="card" (click)="vdCardView(vdCard())">

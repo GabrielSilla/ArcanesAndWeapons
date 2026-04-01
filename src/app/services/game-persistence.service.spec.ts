@@ -19,6 +19,7 @@ function minimalSnapshot(overrides: Partial<SessionSnapshot> = {}): SessionSnaps
     weaponCard: '',
     hasSlave: false,
     slaveCard: '',
+    slaveId: 0,
     hasVD: true,
     vdCard: '/assets/cards/vd/blessed.png',
     hasMagic: false,

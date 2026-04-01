@@ -71,6 +71,7 @@ export class Cards {
         new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, 0 , true),
     ];
 
+
     public magic = [
         new MagicCardModel(1, "Barreira de Distorção", 'assets/cards/magic/arcane/barreira-distorcao.png', 2, 0, 0, 0),
         new MagicCardModel(2, "Campo Gravitacional", 'assets/cards/magic/arcane/campo-gravitacional.png', 4, 0, 0, 0),
@@ -123,5 +124,16 @@ export class Cards {
         new MagicCardModel(49, "Remover Olhos", 'assets/cards/magic/necro/remover-olhos.png', 0, 2, 0, 0),
         new MagicCardModel(50, "Toque Sombrio", 'assets/cards/magic/necro/toque-sombrio.png', 0, 1, 0, 0),
         new MagicCardModel(51, "Transfusão Forçada", 'assets/cards/magic/necro/transfusao-forcada.png', 0, 2, 0, 0)
-    ]
+    ];
+
+    public servants = [
+        new CardModel(1, "Aragrog", '/assets/cards/servants/aragrog.png', false, 0),
+        new CardModel(2, "Aranha Espectral", '/assets/cards/servants/aranha-espectral.png', false, 0),
+        new CardModel(3, "Aranha Espreitadora", '/assets/cards/servants/aranha-espreitadora.png', false, 0),
+        new CardModel(4, "Cão Raivoso", '/assets/cards/servants/cao-raivoso.png', false, 0),
+        new CardModel(5, "Esqueleto Inferior", '/assets/cards/servants/esqueleto-inferior.png', false, 0),
+        new CardModel(6, "Esqueleto Superior", '/assets/cards/servants/esqueleto-superior.png', false, 0),
+        new CardModel(7, "Lobo Espetral", '/assets/cards/servants/lobo-espetral.png', false, 0),
+        new CardModel(8, "Lobo Cinzento", '/assets/cards/servants/lobo-lacaio.png', false, 0),
+    ];
 }

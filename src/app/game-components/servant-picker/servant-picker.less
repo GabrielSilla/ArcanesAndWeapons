@@ -1,0 +1,54 @@
+/* Tema do modal/header: ver styles.less (ion-modal em portal global) */
+
+.servant-picker-body {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-height: 100%;
+    width: 100%;
+    padding-top: 8px;
+}
+
+.servant-rules-placeholder {
+    min-height: 0;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+
+.servant-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(140px, 28vw), 1fr));
+    gap: clamp(10px, 2.5vw, 16px);
+    width: 100%;
+    flex: 1 1 auto;
+    align-content: start;
+    box-sizing: border-box;
+}
+
+.servant-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px;
+    margin: 0;
+    border: 1px solid rgba(var(--ion-color-primary-rgb), 0.35);
+    border-radius: 8px;
+    background: rgba(var(--ion-color-primary-rgb), 0.08);
+    cursor: pointer;
+    font-family: 'MedievalSharpBook', serif;
+    color: var(--ion-color-primary);
+
+    ion-img {
+        width: 100%;
+        max-width: min(120px, 22vw);
+        aspect-ratio: 3 / 4;
+        object-fit: contain;
+    }
+}
+
+.servant-name {
+    font-size: 0.75rem;
+    text-align: center;
+    line-height: 1.2;
+}

@@ -11,6 +11,8 @@ import { Bag } from "./bag/bag";
 import { MagicCardModel } from '../static/magic-card-model';
 import { Messages } from './messages/messages';
 import { ItemChange } from './item-change/item-change';
+import { ClassActions } from './class-actions/class-actions';
+import { ServantPicker } from './servant-picker/servant-picker';
 import {
     GamePersistenceService,
     type SessionSnapshot,
@@ -19,7 +21,7 @@ import {
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [IonicModule, CommonModule, ActionConfig, CardsScroll, Bag, Messages, ItemChange],
+  imports: [IonicModule, CommonModule, ActionConfig, CardsScroll, Bag, Messages, ItemChange, ClassActions, ServantPicker],
   templateUrl: './game.html',
   styleUrl: './game.less'
 })
@@ -56,6 +58,7 @@ export class Game {
             weaponCard: this.weaponCard(),
             hasSlave: this.hasSlave(),
             slaveCard: this.slaveCard(),
+            slaveId: this.slaveId(),
             hasVD: this.hasVD(),
             vdCard: this.vdCard(),
             hasMagic: this.magicCards().length > 0,
@@ -84,6 +87,7 @@ export class Game {
         this.weaponCard.set(s.weaponCard);
         this.hasSlave.set(s.hasSlave);
         this.slaveCard.set(s.slaveCard);
+        this.slaveId.set(s.slaveId ?? 0);
         this.hasVD.set(s.hasVD);
         this.vdCard.set(s.vdCard);
         this.magicCards.set(s.magicCards);
@@ -108,15 +112,31 @@ export class Game {
       }
     ];
 
+    resetConfirmButtons = [
+        {
+            text: 'Cancelar',
+            role: 'cancel',
+        },
+        {
+            text: 'Resetar',
+            role: 'confirm',
+            handler: () => {
+                this.resetWithFlash();
+            },
+        },
+    ];
+
     // State Control
     flashActive = signal(false);
     showBag = signal(false);
     showActionSheet = signal(false);
+    showResetConfirm = signal(false);
     modalOpen = signal(false);
     alertMessage = signal("");
     messageModal = signal("");
     showChangeModal = signal(false);
     newItensConfirmed = signal(false);
+    showServantPicker = signal(false);
 
     // Atributes
     totalhp = signal(25);
@@ -144,6 +164,7 @@ export class Game {
 
     hasSlave = signal(false);
     slaveCard = signal("");
+    slaveId = signal(0);
 
     hasVD = signal(false);
     vdCard = signal("");
@@ -301,7 +322,31 @@ export class Game {
             this.selectedCard.set(path);
         }
     }
-    
+
+    slaveCardView(path: string) {
+        if (this.hasSlave()) {
+            this.selectedCard.set(path);
+        }
+    }
+
+    openServantPicker() {
+        this.showServantPicker.set(true);
+    }
+
+    onServantPickerClosed() {
+        this.showServantPicker.set(false);
+    }
+
+    onServantPicked(id: number) {
+        const card = this.cards.servants.find((c) => c.id === id);
+        if (card) {
+            this.hasSlave.set(true);
+            this.slaveCard.set(card.source);
+            this.slaveId.set(card.id);
+        }
+        this.showServantPicker.set(false);
+    }
+
     resetCardView() {
         this.selectedCard.set('');
     }
@@ -310,9 +355,13 @@ export class Game {
         this.showActionSheet.set(false);
     }
 
+    onResetAlertDismiss() {
+        this.showResetConfirm.set(false);
+    }
+
     onActionSheetSelected(action: any) {
         if(action == 'reset') {
-            this.resetWithFlash();
+            this.showResetConfirm.set(true);
         }
 
         if(action == 'share') {
@@ -513,6 +562,7 @@ export class Game {
 
         this.hasSlave.set(false);
         this.slaveCard.set("");
+        this.slaveId.set(0);
 
         this.hasVD.set(false);
         this.vdCard.set("");

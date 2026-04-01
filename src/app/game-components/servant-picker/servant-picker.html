@@ -1,0 +1,30 @@
+<ion-modal class="servant-picker-modal" [isOpen]="isOpen" (didDismiss)="onDismiss()">
+  <ng-template>
+    <ion-header class="servant-picker-header">
+      <ion-toolbar class="servant-picker-toolbar">
+        <ion-title class="servant-picker-title">Escolher lacaio</ion-title>
+        <ion-buttons slot="end">
+          <ion-button class="servant-picker-close" fill="clear" (click)="close()">Fechar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="servant-picker-content">
+      <div class="servant-picker-body">
+      <!-- Área reservada para regras/stats por servo no futuro -->
+      <div class="servant-rules-placeholder" aria-hidden="true"></div>
+
+      <div class="servant-grid">
+        <button
+          type="button"
+          class="servant-tile"
+          *ngFor="let s of servants"
+          (click)="pick(s.id)"
+        >
+          <ion-img [src]="s.source" [alt]="s.name"></ion-img>
+          <span class="servant-name">{{ s.name }}</span>
+        </button>
+      </div>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
