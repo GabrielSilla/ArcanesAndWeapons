@@ -43,9 +43,11 @@
     bottom: 10px;
     left: 0;
     width: 100%;
+    margin-bottom: 40px;
+
 
     .card {
-        width: 120px;
+        width: 140px;
         padding: 2px 2px 2px 2px;
         position: relative;
     }
@@ -466,10 +468,11 @@ ion-icon {
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 420px) {
     .right-bottom-view {
+        margin-bottom: 25px;
         .card {
-            width: 100px;
+            width: 120px;
             margin: 0 2px 0 2px;
         }
         ion-button {
@@ -492,4 +495,33 @@ ion-icon {
         width: 80%;
     }
 }
+
+@media screen and (max-width: 390px) {
+    .right-bottom-view {
+        margin-bottom: 25px;
+        .card {
+            width: 110px;
+            margin: 0 2px 0 2px;
+        }
+        ion-button {
+            font-size: 9px;
+            position: absolute;
+            top: 30px;
+            left: 48%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+    }
+
+    .magic-card {
+        ion-img {
+            width: 97px;
+        }
+    }
+    
+    .new-items {
+        width: 80%;
+    }
+}
+
 
