@@ -32,6 +32,13 @@ import {
 })
 export class Game {
 
+    /**
+     * Chance por carta de loot do baú de ser arma (o resto sai só de consumíveis).
+     * Antes era ~62% arma/slot (20/32); com 0.1 fica ~10% por slot.
+     * Peso de cada carta: `CardModel.lootWeight` em `cards.ts`.
+     */
+    private static readonly TREASURE_WEAPON_SLOT_CHANCE = 0.1;
+
     private readonly persistence = inject(GamePersistenceService);
 
     constructor(private modalCtrl: ModalController) {
@@ -584,29 +591,68 @@ export class Game {
             this.vdCardsForCarousel.set([]);
             this.hasVD.set(true);
             this.vdCard.set(card.source);
+
+            if(id == 8){
+                this.damage.set(this.damage() + 2);
+            } else if(id == 14) {
+                this.damage.set(this.damage() - 2);
+            }
         } else {
             this.vdCardsForCarousel.set([]);
         }
     }
 
-    // Chest
+    /** Sorteio ponderado com `lootWeight` definido em cada carta (`cards.ts`). */
+    private pickRandomLootWeighted(cards: CardModel[]): CardModel {
+        const weights = cards.map((c) => {
+            const w = c.lootWeight;
+            return typeof w === 'number' && w > 0 ? w : 8;
+        });
+        const total = weights.reduce((s, n) => s + n, 0);
+        let r = Math.random() * total;
+        for (let i = 0; i < cards.length; i++) {
+            r -= weights[i];
+            if (r <= 0) {
+                return cards[i];
+            }
+        }
+        return cards[cards.length - 1];
+    }
 
+    /**
+     * Consumíveis (não-arma) vs armas em pools separados: armas são raras no baú.
+     */
+    private pickTreasureItemCard(consumables: CardModel[], weapons: CardModel[]): CardModel {
+        if (weapons.length === 0) {
+            return this.pickRandomLootWeighted(consumables);
+        }
+        if (consumables.length === 0) {
+            return this.pickRandomLootWeighted(weapons);
+        }
+        if (Math.random() < Game.TREASURE_WEAPON_SLOT_CHANCE) {
+            return this.pickRandomLootWeighted(weapons);
+        }
+        return this.pickRandomLootWeighted(consumables);
+    }
+
+    // Chest
     public treasureShuffle() {
-        let itemCards = this.cards.itens;
-        let stoneCards = this.cards.stones;
+        const itemCards = this.cards.itens;
+        const consumables = itemCards.filter((c) => !c.isWeapon);
+        const weapons = itemCards.filter((c) => c.isWeapon);
+        const stoneCards = this.cards.stones;
 
         let qtdItens = Math.floor(Math.random() * 2) + 1;
         let qtdPedras = Math.floor(Math.random() * 2) + 1;
 
         for (let index = 0; index < qtdItens; index++) {
-            const card = itemCards[Math.floor(Math.random() * itemCards.length)];
-            this.chestReceivedItens.update(cards => [...cards, card]);
+            const card = this.pickTreasureItemCard(consumables, weapons);
+            this.chestReceivedItens.update((cards) => [...cards, card]);
         }
 
         for (let index = 0; index < qtdPedras; index++) {
-            const card = stoneCards[Math.floor(Math.random() * stoneCards.length)];
-            
-            this.chestReceivedItens.update(cards => [...cards, card]);
+            const card = this.pickRandomLootWeighted(stoneCards);
+            this.chestReceivedItens.update((cards) => [...cards, card]);
         }
         this.openModal();
     }
@@ -649,18 +695,26 @@ export class Game {
         let selectItem = itemCards.filter(c => c.id === id)[0];
         
         if(selectItem.isWeapon) {
-            if(canEquipWeapon(this.classId(), selectItem)) {
+            if(canEquipWeapon(this.classId(), selectItem) && !this.vdCard().includes("half-metamorfosis")) {
                 this.hasWeapon.set(true);
                 this.weaponCard.set(selectItem.source);
                 this.damage.set(
                     this.level() +
                         selectItem.attack +
-                        weaponDamageBonus(this.classId(), selectItem),
+                        weaponDamageBonus(this.classId(), selectItem) +
+                        (this.vdCard().includes("weapon-master") ? 2 : 0),
                 );
             } else {
-                this.showMessage(
-                    'Esta arma não combina com o teu tipo de classe (física/mágica).',
-                );
+                if(this.vdCard().includes("half-metamorfosis")) {
+                    this.showMessage(
+                        'Sua vantagem Metamorfose Parcial não permite equipar armas.',
+                    );
+                }
+                else {
+                    this.showMessage(
+                        'Esta arma não combina com o teu tipo de classe (física/mágica).',
+                    );
+                }
                 this.showBag.set(false);
                 return;
             }

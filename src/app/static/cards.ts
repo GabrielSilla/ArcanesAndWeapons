@@ -25,59 +25,62 @@ export class Cards {
         new CardModel(3, "Aracnofobia", '/assets/cards/vd/aracnofobia.png', false, 0),
         new CardModel(4, "Abençoado", '/assets/cards/vd/blessed.png', false, 0),
         new CardModel(5, "Reflexos de Gato", '/assets/cards/vd/cat-reflexes.png', false, 0),
-        new CardModel(6, "Cleptomaniaco", '/assets/cards/vd/cleptomaniac.png', false, 0),
-        new CardModel(7, "Sorte Dupla", '/assets/cards/vd/double-luck.png', false, 0),
-        new CardModel(8, "Aura Amedrontadora", '/assets/cards/vd/fearsome-aura.png', false, 0),
-        new CardModel(9, "Metamorfose Parcial", '/assets/cards/vd/half-metamorfosis.png', false, 0),
-        new CardModel(10, "Dom de Cura", '/assets/cards/vd/healing-gift.png', false, 0),
-        new CardModel(11, "Vício em Alquimia", '/assets/cards/vd/mad-alchemist.png', false, 0),
-        new CardModel(12, "Medo do Escuro", '/assets/cards/vd/fear-of-dark.png', false, 0),
-        new CardModel(13, "Visão Noturna", '/assets/cards/vd/night-vision.png', false, 0),
-        new CardModel(14, "Vampirismo", '/assets/cards/vd/vampirism.png', false, 0),
-        new CardModel(15, "Grito de Guerra", '/assets/cards/vd/war-scream.png', false, 0),
-        new CardModel(16, "Perito em Armas", '/assets/cards/vd/weapon-master.png', false, 0),
+        new CardModel(6, "Sorte Dupla", '/assets/cards/vd/double-luck.png', false, 0),
+        new CardModel(7, "Aura Amedrontadora", '/assets/cards/vd/fearsome-aura.png', false, 0),
+        new CardModel(8, "Metamorfose Parcial", '/assets/cards/vd/half-metamorfosis.png', false, 0), //Adicionar + 2 de dano desarmado
+        new CardModel(9, "Dom de Cura", '/assets/cards/vd/healing-gift.png', false, 0),
+        new CardModel(10, "Medo do Escuro", '/assets/cards/vd/fear-of-dark.png', false, 0),
+        new CardModel(11, "Visão Noturna", '/assets/cards/vd/night-vision.png', false, 0),
+        new CardModel(12, "Vampirismo", '/assets/cards/vd/vampirism.png', false, 0),
+        new CardModel(13, "Grito de Guerra", '/assets/cards/vd/war-scream.png', false, 0),
+        new CardModel(14, "Perito em Armas", '/assets/cards/vd/weapon-master.png', false, 0), // Adicionar + 2 de dano com arma, e -2 de dano desarmado
+        //new CardModel(15, "Cleptomaniaco", '/assets/cards/vd/cleptomaniac.png', false, 0),
+        //new CardModel(16, "Vício em Alquimia", '/assets/cards/vd/mad-alchemist.png', false, 0),
     ];
 
     public itens = [
-        new CardModel(1, "Adaga Básica", '/assets/cards/itens/adaga-basica.png', true, 1, 'melee', 3),
-        new CardModel(2, "Adaga do Adepto", '/assets/cards/itens/adaga-adepto.png', true, 2, 'melee', 3),
-        new CardModel(3, "Adaga Avançada", '/assets/cards/itens/adaga-avancada.png', true, 3, 'melee', 3),
-        new CardModel(4, "Cajado Básico", '/assets/cards/itens/cajado-basico.png', true, 1, 'magic', 1),
-        new CardModel(5, "Cajado do Adepto", '/assets/cards/itens/cajado-adepto.png', true, 2, 'magic', 1),
-        new CardModel(6, "Cajado Avançado", '/assets/cards/itens/cajado-avancado.png', true, 3, 'magic', 1),
-        new CardModel(7, "Espada Básica", '/assets/cards/itens/espada-basica.png', true, 1, 'melee', 2),
-        new CardModel(8, "Espada do Adepto", '/assets/cards/itens/espada-adepto.png', true, 2, 'melee', 2),
-        new CardModel(9, "Espada Avançada", '/assets/cards/itens/espada-avancada.png', true, 3, 'melee', 2),
-        new CardModel(10, "Tomo Básico", '/assets/cards/itens/tomo-basico.png', true, 1, 'magic', 4),
-        new CardModel(11, "Tomo do Adepto", '/assets/cards/itens/tomo-adepto.png', true, 2, 'magic', 4),
-        new CardModel(12, "Tomo Avançado", '/assets/cards/itens/tomo-avancado.png', true, 3, 'magic', 4),
+        // armas: lootWeight 3/3/1 = tier de dano (1 / 2 / 3)
+        new CardModel(1, "Adaga Básica", '/assets/cards/itens/adaga-basica.png', true, 1, 'melee', 3, 3, false),
+        new CardModel(2, "Adaga do Adepto", '/assets/cards/itens/adaga-adepto.png', true, 2, 'melee', 3, 3, false),
+        new CardModel(3, "Adaga Avançada", '/assets/cards/itens/adaga-avancada.png', true, 3, 'melee', 3, 1, false),
+        new CardModel(4, "Cajado Básico", '/assets/cards/itens/cajado-basico.png', true, 1, 'magic', 1, 3, false),
+        new CardModel(5, "Cajado do Adepto", '/assets/cards/itens/cajado-adepto.png', true, 2, 'magic', 1, 3, false),
+        new CardModel(6, "Cajado Avançado", '/assets/cards/itens/cajado-avancado.png', true, 3, 'magic', 1, 1, false),
+        new CardModel(7, "Espada Básica", '/assets/cards/itens/espada-basica.png', true, 1, 'melee', 2, 3, false),
+        new CardModel(8, "Espada do Adepto", '/assets/cards/itens/espada-adepto.png', true, 2, 'melee', 2, 3, false),
+        new CardModel(9, "Espada Avançada", '/assets/cards/itens/espada-avancada.png', true, 3, 'melee', 2, 1, false),
+        new CardModel(10, "Tomo Básico", '/assets/cards/itens/tomo-basico.png', true, 1, 'magic', 4, 3, false),
+        new CardModel(11, "Tomo do Adepto", '/assets/cards/itens/tomo-adepto.png', true, 2, 'magic', 4, 3, false),
+        new CardModel(12, "Tomo Avançado", '/assets/cards/itens/tomo-avancado.png', true, 3, 'magic', 4, 1, false),
+        // consumíveis: lootWeight omitido = 8 (comum); mais baixo = mais raro no baú
         new CardModel(13, "Bomba de Fumaça", '/assets/cards/itens/bomba-fumaca.png', false, 0),
-        new CardModel(14, "Coração de Dragão", '/assets/cards/itens/coracao-dragao.png', false, 0),
+        new CardModel(14, "Coração de Dragão", '/assets/cards/itens/coracao-dragao.png', false, 0, null, 0, 1), //muito raro
         new CardModel(15, "Óleo de Lentidão", '/assets/cards/itens/oleo-lentidao.png', false, 0),
-        new CardModel(16, "Pergaminho da Morte", '/assets/cards/itens/pergaminho-morte.png', false, 0),
-        new CardModel(17, "Pergaminho de Retorno", '/assets/cards/itens/pergaminho-retorno.png', false, 0),
-        new CardModel(18, "Poção Explosiva", '/assets/cards/itens/pocao-explosiva.png', false, 0),
+        new CardModel(16, "Pergaminho da Morte", '/assets/cards/itens/pergaminho-morte.png', false, 0, null, 0, 1), //muito raro
+        new CardModel(17, "Pergaminho de Retorno", '/assets/cards/itens/pergaminho-retorno.png', false, 0, null, 0, 3), //raro
+        new CardModel(18, "Poção Explosiva", '/assets/cards/itens/pocao-explosiva.png', false, 0, null, 0, 3),
         new CardModel(19, "Poção de Força", '/assets/cards/itens/pocao-forca.png', false, 0),
-        new CardModel(20, "Poção da Invisibilidade", '/assets/cards/itens/pocao-invisibilidade.png', false, 0),
+        new CardModel(20, "Poção da Invisibilidade", '/assets/cards/itens/pocao-invisibilidade.png', false, 0, null, 0, 3),
         new CardModel(21, "Poção de Mana", '/assets/cards/itens/pocao-mana.png', false, 0),
         new CardModel(22, "Poção de Restauração", '/assets/cards/itens/pocao-pv.png', false, 0),
         new CardModel(23, "Poção de Resistência", '/assets/cards/itens/pocao-resistencia.png', false, 0),
-        new CardModel(24, "Poção da Vida", '/assets/cards/itens/pocao-reviver.png', false, 0),
-        new CardModel(25, "Veneno Maior", '/assets/cards/itens/veneno-maior.png', false, 0),
+        new CardModel(24, "Poção da Vida", '/assets/cards/itens/pocao-reviver.png', false, 0, null, 0, 1),
+        new CardModel(25, "Veneno Maior", '/assets/cards/itens/veneno-maior.png', false, 0, null, 0, 3),
         new CardModel(26, "Veneno Menor", '/assets/cards/itens/veneno-menor.png', false, 0),
-        new CardModel(27, "Arco Básico", '/assets/cards/itens/arco-basico.png', true, 1, 'melee', 5),
-        new CardModel(28, "Arco do Adepto", '/assets/cards/itens/arco-adepto.png', true, 2, 'melee', 5),
-        new CardModel(29, "Arco Avançado", '/assets/cards/itens/arco-avancado.png', true, 3, 'melee', 5),
-        new CardModel(30, "Martelo Básico", '/assets/cards/itens/martelo-basico.png', true, 1, 'melee', 6),
-        new CardModel(31, "Martelo do Adepto", '/assets/cards/itens/martelo-adepto.png', true, 2, 'melee', 6),
-        new CardModel(32, "Martelo Avançado", '/assets/cards/itens/martelo-avancado.png', true, 3, 'melee', 6),
+        new CardModel(27, "Arco Básico", '/assets/cards/itens/arco-basico.png', true, 1, 'melee', 5, 3, false),
+        new CardModel(28, "Arco do Adepto", '/assets/cards/itens/arco-adepto.png', true, 2, 'melee', 5, 3, false),
+        new CardModel(29, "Arco Avançado", '/assets/cards/itens/arco-avancado.png', true, 3, 'melee', 5, 1, false),
+        new CardModel(30, "Martelo Básico", '/assets/cards/itens/martelo-basico.png', true, 1, 'melee', 6, 3, false),
+        new CardModel(31, "Martelo do Adepto", '/assets/cards/itens/martelo-adepto.png', true, 2, 'melee', 6, 3, false),
+        new CardModel(32, "Martelo Avançado", '/assets/cards/itens/martelo-avancado.png', true, 3, 'melee', 6, 1, false),
     ];
 
     public stones = [
-        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0, null, 0, true),
-        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0, null, 0, true),
-        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0, null, 0, true),
-        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, null, 0, true),
+        // pedras: mesmo peso entre si (1) no sorteio do baú
+        new CardModel(1, "Pedra Arcana", '/assets/cards/magic/arcane-stone.png', false, 0, null, 0, 1, true),
+        new CardModel(2, "Pedra da Morte", '/assets/cards/magic/death-stone.png', false, 0, null, 0, 1, true),
+        new CardModel(3, "Pedra Elemental", '/assets/cards/magic/elemental-stone.png', false, 0, null, 0, 1, true),
+        new CardModel(4, "Pedra Sagrada", '/assets/cards/magic/holy-stone.png', false, 0, null, 0, 1, true),
     ];
 
 
@@ -136,7 +139,7 @@ export class Cards {
     ];
 
     public servants: ServantCardModel[] = [
-        new ServantCardModel(1, "Aragrog", '/assets/cards/servants/aragrog.png', 'tamed'),
+        new ServantCardModel(1, "Aragrog", '/assets/cards/servants/aragrog.png', 'tamed', { damageBonus: 2 }),
         new ServantCardModel(2, "Aranha Espectral", '/assets/cards/servants/aranha-espectral.png', 'natural_magic', { servantHp: 15 }),
         new ServantCardModel(3, "Aranha Espreitadora", '/assets/cards/servants/aranha-espreitadora.png', 'tamed'),
         new ServantCardModel(4, "Cão Raivoso", '/assets/cards/servants/cao-raivoso.png', 'tamed'),
@@ -144,5 +147,10 @@ export class Cards {
         new ServantCardModel(6, "Esqueleto Superior", '/assets/cards/servants/esqueleto-superior.png', 'necromancy', { turnDuration: 5, damageBonus: 5 }),
         new ServantCardModel(7, "Lobo Espetral", '/assets/cards/servants/lobo-espetral.png', 'natural_magic', { servantHp: 25 }),
         new ServantCardModel(8, "Lobo Cinzento", '/assets/cards/servants/lobo-lacaio.png', 'tamed'),
+        new ServantCardModel(9, "Aranha de Sangue", '/assets/cards/servants/aranha-de-sangue.png', 'tamed'),
+        new ServantCardModel(10, "Inseto Cinzento", '/assets/cards/servants/inseto-cinzento.png', 'tamed'),
+        new ServantCardModel(11, "Sapo Venenoso", '/assets/cards/servants/sapo-venenoso.png', 'tamed'),
+        new ServantCardModel(12, "Vespa Assassina", '/assets/cards/servants/vespa-assassina.png', 'tamed'),
+
     ];
 }

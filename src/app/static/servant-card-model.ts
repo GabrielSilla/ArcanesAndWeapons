@@ -24,7 +24,7 @@ export class ServantCardModel extends CardModel {
         kind: ServantKind,
         opts: ServantCardOpts = {}
     ) {
-        super(id, name, source, false, 0, null, 0, false);
+        super(id, name, source, false, 0, null, 0, 8, false);
         this.kind = kind;
         if (opts.servantHp !== undefined) {
             this.servantHp = opts.servantHp;

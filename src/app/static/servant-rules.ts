@@ -8,7 +8,7 @@ export type ServantDamageContext = {
 export function getServantDamage(servant: ServantCardModel, ctx: ServantDamageContext): number {
     switch (servant.kind) {
         case 'tamed':
-            return Math.ceil(ctx.playerLevel / 2);
+            return Math.ceil(ctx.playerLevel / 2) + (servant.damageBonus ?? 0);
         case 'natural_magic':
             return ctx.playerBaseDamage;
         case 'necromancy':

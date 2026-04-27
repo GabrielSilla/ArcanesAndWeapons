@@ -11,11 +11,16 @@ export class CardModel {
     equipInType: WeaponEquipType | null;
     /** Id da classe que recebe +1 de dano com esta arma; `0` se não aplicável. */
     bonusInClass: number;
+    /**
+     * Peso no sorteio do baú (maior = mais comum). Armas: típico 8 / 3 / 1 por tier de dano.
+     */
+    lootWeight: number;
     isStone: boolean;
 
     /**
      * @param equipInType Tipo de arma (físico/mágico); ignorado quando `isStone === true` (pedra, não arma).
      * @param bonusInClass Classe com bónus +1 de dano; 0 quando não aplicável.
+     * @param lootWeight Peso no baú; padrão 8 (itens comuns). Pedras/ raros ajustar em `cards.ts`.
      * @param isStone Pedra mágica (não é arma).
      */
     constructor(
@@ -26,6 +31,7 @@ export class CardModel {
         attack: number,
         equipInType: WeaponEquipType | null = null,
         bonusInClass = 0,
+        lootWeight = 8,
         isStone = false,
     ) {
         this.id = id;
@@ -35,6 +41,7 @@ export class CardModel {
         this.attack = attack;
         this.equipInType = equipInType;
         this.bonusInClass = bonusInClass;
+        this.lootWeight = lootWeight;
         this.isStone = isStone;
     }
 }
